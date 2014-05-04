@@ -9,11 +9,17 @@ class TestModelRelations(TestCase):
         cool_school_location = Location.objects.create(school=cool_school, name="Kirkland")
         john_doe_user = User.objects.create_user('johndoe','johndoe@johndoe.com','password')
         jane_doe_user = User.objects.create_user('janedoe','janedoe@janedoe.com','password')
+        bob_loblaw_user = User.objects.create_user('bobloblaw','bob@loblaw.com','password')
         cool_school_instructor = Person.objects.create(user=john_doe_user, first_name="John", last_name="Doe")
-        cool_school_student = Person.objects.create(user=jane_doe_user, first_name="Jane", last_name="Doe")
+        cool_school_student_1 = Person.objects.create(user=jane_doe_user, first_name="Jane", last_name="Doe")
+        cool_school_student_2 = Person.objects.create(user=bob_loblaw_user, first_name="Bob", last_name="Loblaw")
         cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
         cool_school_course.instructors.add(cool_school_instructor)
-        cool_school_course.students.add(cool_school_student)
+        cool_school_course.students.add(cool_school_student_1)
+        cool_school_course_session = Session.objects.create(course=cool_school_course)
+        
+        cool_school_course_session.students.add(cool_school_student_1)
+        cool_school_course_session.students.add(cool_school_student_2)
 
     def testSchoolHasLocation(self):
         cool_school = School.objects.get(name="A Cool School")
@@ -32,4 +38,10 @@ class TestModelRelations(TestCase):
 
         self.assertTrue(cool_school_instructor in cool_school_course.instructors.all())
         self.assertTrue(cool_school_student in cool_school_course.students.all())
-        
+
+    def testSessionHasStudents(self):
+        cool_school_course_session = Session.objects.get(pk=1)
+        cool_school_student_1 = Person.objects.get(first_name="Jane", last_name="Doe")
+        cool_school_student_2 = Person.objects.get(first_name="Bob", last_name="Loblaw")
+        self.assertTrue(cool_school_student_1 in cool_school_course_session.students.all())
+        self.assertTrue(cool_school_student_2 in cool_school_course_session.students.all())
