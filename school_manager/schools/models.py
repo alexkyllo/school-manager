@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Person(models.Model):
     user = models.OneToOneField(User)
+    first_name = models.CharField(max_length=80)
+    last_name = models.CharField(max_length=80)
 
 class School(models.Model):
     name = models.CharField(max_length=80)
@@ -21,6 +23,7 @@ class Location(models.Model):
 
 class Course(models.Model):
     location = models.ForeignKey(Location)
+    name = models.CharField(max_length=50)
     instructors = models.ManyToManyField(Person, related_name="instructors")
     students = models.ManyToManyField(Person, related_name="students")
 
