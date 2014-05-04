@@ -3,8 +3,8 @@
 import requests
 import os
 
-# For this to work, the digitalocean DO_API_KEY and DO_CLIENT_KEY
-# should be set a environmental variables
+# For this to work, the digitalocean DO_API_KEY, DO_CLIENT_KEY and DO_DEFAULT_SSH_KEY
+# should be set as environmental variables
 # linux examples in ~./bashrc
 # export DO_API_KEY=###########################
 # export DO_CLIENT_KEY=#########################
