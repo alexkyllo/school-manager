@@ -1,5 +1,7 @@
 from django.test import TestCase
 from schools.models import *
+from datetime import datetime, timedelta
+from django.utils.timezone import utc
 
 # Create your tests here.
 
@@ -16,8 +18,7 @@ class TestModelRelations(TestCase):
         cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
         cool_school_course.instructors.add(cool_school_instructor)
         cool_school_course.students.add(cool_school_student_1)
-        cool_school_course_session = Session.objects.create(course=cool_school_course)
-        
+        cool_school_course_session = Session.objects.create(course=cool_school_course, datetime=datetime.now(utc) + timedelta(days=1))
         cool_school_course_session.students.add(cool_school_student_1)
         cool_school_course_session.students.add(cool_school_student_2)
 
@@ -45,3 +46,7 @@ class TestModelRelations(TestCase):
         cool_school_student_2 = Person.objects.get(first_name="Bob", last_name="Loblaw")
         self.assertTrue(cool_school_student_1 in cool_school_course_session.students.all())
         self.assertTrue(cool_school_student_2 in cool_school_course_session.students.all())
+
+    def testSessionHasDateTime(self):
+        cool_school_course_session = Session.objects.get(pk=1)
+        self.assertTrue(cool_school_course_session.datetime)

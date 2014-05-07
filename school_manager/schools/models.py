@@ -30,5 +30,7 @@ class Course(models.Model):
 class Session(models.Model):
     course = models.ForeignKey(Course)
     students = models.ManyToManyField(Person)
+    datetime = models.DateTimeField()
+
 	
 	
