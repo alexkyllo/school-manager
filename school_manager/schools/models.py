@@ -49,7 +49,7 @@ class Session(models.Model):
 
     def __str__(self):
         startdatetime = timezone.localtime(self.startdatetime)
-        return self.course.name + " on " + startdatetime.strftime("%B")
+        return self.course.name + " on " + startdatetime.strftime("%A, %B %d at %X")
 
 	
 	

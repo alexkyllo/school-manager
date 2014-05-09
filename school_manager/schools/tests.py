@@ -19,7 +19,8 @@ class TestModelRelations(TestCase):
         cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
         cool_school_course.instructors.add(cool_school_instructor)
         cool_school_course.students.add(cool_school_student_1)
-        cool_school_course_session = Session.objects.create(course=cool_school_course, startdatetime=datetime.now(utc) + timedelta(days=1), enddatetime=datetime.now(utc)+timedelta(days=1,hours=1))
+        dt = datetime(2014, 5, 9, 5, 35, 5, 730613)
+        cool_school_course_session = Session.objects.create(course=cool_school_course, startdatetime=dt, enddatetime=dt+timedelta(hours=1))
         cool_school_course_session.students.add(cool_school_student_1)
         cool_school_course_session.students.add(cool_school_student_2)
 
@@ -55,4 +56,4 @@ class TestModelRelations(TestCase):
     def testSessionHasDateTime(self):
         cool_school_course_session = Session.objects.get(pk=1)
         self.assertTrue(type(cool_school_course_session.startdatetime) == datetime)
-        self.assertEqual(str(cool_school_course_session.startdatetime), "Yoga 101 on May 8 at ")
+        self.assertEqual(str(cool_school_course_session), "Yoga 101 on Friday, May 09 at 05:35:05")
