@@ -53,4 +53,7 @@ coverage.xml
 docs/_build/
 
 #sqlite database
-school_manager/db.sqlite3
+*.sqlite3
+
+#Mac system files
+*.DS_Store
