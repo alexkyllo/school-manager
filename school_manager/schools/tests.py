@@ -3,6 +3,7 @@ from schools.models import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
 
+
 # Create your tests here.
 
 class TestModelRelations(TestCase):
@@ -18,7 +19,7 @@ class TestModelRelations(TestCase):
         cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
         cool_school_course.instructors.add(cool_school_instructor)
         cool_school_course.students.add(cool_school_student_1)
-        cool_school_course_session = Session.objects.create(course=cool_school_course, datetime=datetime.now(utc) + timedelta(days=1))
+        cool_school_course_session = Session.objects.create(course=cool_school_course, startdatetime=datetime.now(utc) + timedelta(days=1), enddatetime=datetime.now(utc)+timedelta(days=1,hours=1))
         cool_school_course_session.students.add(cool_school_student_1)
         cool_school_course_session.students.add(cool_school_student_2)
 
@@ -26,11 +27,13 @@ class TestModelRelations(TestCase):
         cool_school = School.objects.get(name="A Cool School")
         location = Location.objects.get(name="Kirkland")
         self.assertEqual(location.school, cool_school)
+        self.assertEqual(str(location),"Kirkland")
 
     def testLocationHasCourse(self):
         cool_school_course = Course.objects.get(name="Yoga 101")
         cool_school_location = Location.objects.get(name="Kirkland")
         self.assertEqual(cool_school_course.location,cool_school_location)
+        self.assertEqual(str(cool_school_course),"Yoga 101")
 
     def testCourseHasStudentAndInstructor(self):
         cool_school_course = Course.objects.get(name="Yoga 101")
@@ -39,6 +42,8 @@ class TestModelRelations(TestCase):
 
         self.assertTrue(cool_school_instructor in cool_school_course.instructors.all())
         self.assertTrue(cool_school_student in cool_school_course.students.all())
+        self.assertEqual(str(cool_school_student), "Jane Doe")
+        self.assertEqual(str(cool_school_instructor), "John Doe")
 
     def testSessionHasStudents(self):
         cool_school_course_session = Session.objects.get(pk=1)
@@ -49,4 +54,5 @@ class TestModelRelations(TestCase):
 
     def testSessionHasDateTime(self):
         cool_school_course_session = Session.objects.get(pk=1)
-        self.assertTrue(cool_school_course_session.datetime)
+        self.assertTrue(type(cool_school_course_session.startdatetime) == datetime)
+        self.assertEqual(str(cool_school_course_session.startdatetime), "Yoga 101 on May 8 at ")
