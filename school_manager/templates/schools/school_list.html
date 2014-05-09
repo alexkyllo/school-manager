@@ -4,7 +4,7 @@
     <h2>Schools</h2>
     <ul>
         {% for school in object_list %}
-            <li>{{ school.name }}</li>
+            <li>{{ school.name }} <a href="/schools/{{ school.pk }}" >Detail</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
