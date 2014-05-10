@@ -73,7 +73,6 @@ DATABASES = {
 }
 
 #DEFAULT_INDEX_TABLESPACE = 'school_manager'
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
