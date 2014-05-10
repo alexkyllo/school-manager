@@ -8,7 +8,8 @@ from django.utils.timezone import utc
 
 class TestModelRelations(TestCase):
     def setUp(self):
-        cool_school = School.objects.create(name="A Cool School")
+        school_manager_user = Person.objects.create(first_name="Alex",last_name="Kyllo", user=User.objects.create_user("alexkyllo","alex@alexkyllo.com","password"))
+        cool_school = School.objects.create(name="A Cool School", manager=school_manager_user)
         cool_school_location = Location.objects.create(school=cool_school, name="Kirkland")
         john_doe_user = User.objects.create_user('johndoe','johndoe@johndoe.com','password')
         jane_doe_user = User.objects.create_user('janedoe','janedoe@janedoe.com','password')

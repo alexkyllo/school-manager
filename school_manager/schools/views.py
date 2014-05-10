@@ -10,7 +10,6 @@ class SchoolList(ListView):
 class SchoolDetail(DetailView):
 	model = School
 
-
 def home(request):
 	template = loader.get_template('schools/index.html')
 	context = RequestContext(request, {
