@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(k+3b!^stw*n+ui2ncye5m7xb8v0^u3jqzt_nk0y_&(h73k5*-'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,8 +65,8 @@ DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME': 'school_manager',
-        'USER': 'school_manager_user',
-        'PASSWORD': 'school_manager_password',
+        'USER': os.environ.get('PSQL_USER'),
+        'PASSWORD': os.environ.get('PSQL_PASS'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
