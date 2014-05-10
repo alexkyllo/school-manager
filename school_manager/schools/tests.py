@@ -48,13 +48,17 @@ class TestModelRelations(TestCase):
         self.assertEqual(str(cool_school_instructor), "John Doe")
 
     def testSessionHasStudents(self):
-        cool_school_course_session = Session.objects.get(pk=1)
+        dt = datetime(2014, 5, 9, 5, 35, 5, 730613)
+        cool_school_course_session = Session.objects.get(startdatetime=dt)
+        #cool_school_course_session = Session.objects.get(pk=1)
         cool_school_student_1 = Person.objects.get(first_name="Jane", last_name="Doe")
         cool_school_student_2 = Person.objects.get(first_name="Bob", last_name="Loblaw")
         self.assertTrue(cool_school_student_1 in cool_school_course_session.students.all())
         self.assertTrue(cool_school_student_2 in cool_school_course_session.students.all())
 
     def testSessionHasDateTime(self):
-        cool_school_course_session = Session.objects.get(pk=1)
+        dt = datetime(2014, 5, 9, 5, 35, 5, 730613)
+        cool_school_course_session = Session.objects.get(startdatetime=dt)
+        #cool_school_course_session = Session.objects.get(pk=1)
         self.assertTrue(type(cool_school_course_session.startdatetime) == datetime)
         self.assertEqual(str(cool_school_course_session), "Yoga 101 on Friday, May 09 at 05:35:05")
