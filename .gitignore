@@ -54,6 +54,7 @@ docs/_build/
 
 #sqlite database
 *.sqlite3
+school_manager/db.sqlite3
 
 #Mac system files
 *.DS_Store

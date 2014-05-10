@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from schools.views import SchoolList, SchoolDetail
+from schools.views import SchoolList, SchoolDetail, SchoolCreate
 from django.contrib import admin
 admin.autodiscover()
 
@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^$', 'schools.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^schools/$', SchoolList.as_view()),
-    url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view())
+    url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view()),
+    url(r'^schools/create/$', SchoolCreate.as_view())
 )

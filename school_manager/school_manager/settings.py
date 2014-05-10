@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'schools',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,13 +58,21 @@ WSGI_APPLICATION = 'school_manager.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME': 'school_manager',
+        'USER': 'school_manager_user',
+        'PASSWORD': 'school_manager_password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
-DEFAULT_INDEX_TABLESPACE = 'schools'
+#DEFAULT_INDEX_TABLESPACE = 'school_manager'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
