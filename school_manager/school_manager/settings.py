@@ -58,12 +58,16 @@ WSGI_APPLICATION = 'school_manager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sm1',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost'
     }
 }
 
-DEFAULT_INDEX_TABLESPACE = 'schools'
+
+#DEFAULT_INDEX_TABLESPACE = 'schools'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
