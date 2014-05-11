@@ -5,6 +5,9 @@ admin.autodiscover()
 from django.contrib.auth.views import login, logout_then_login
 from django.contrib.auth.decorators import login_required
 
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -19,3 +22,7 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<pk>\d+)/$', login_required(SchoolDetail.as_view())),
     url(r'^schools/create/$', login_required(SchoolCreate.as_view(success_url='/schools/'))),
 )
+
+
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()
