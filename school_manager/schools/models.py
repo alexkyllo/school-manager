@@ -1,19 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
 
 # Create your models here.
 class Person(models.Model):
     user = models.OneToOneField(User)
-    first_name = models.CharField(max_length=80)
-    last_name = models.CharField(max_length=80)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.user.first_name + " " + self.user.last_name
+
+    def create_person(sender, instance, created, **kwargs):
+        if created:
+           Person.objects.create(user=instance)
+
+    post_save.connect(create_person, sender=User)
 
 class School(models.Model):
     name = models.CharField(max_length=80)
-    manager = models.ForeignKey(Person, related_name="manager")
+    manager = models.ForeignKey(User, related_name="manager")
 
     def __str__(self):
         return self.name
@@ -21,7 +26,7 @@ class School(models.Model):
 class Location(models.Model):
     school = models.ForeignKey(School)
     name = models.CharField(max_length=50)
-    managers = models.ManyToManyField(Person)
+    managers = models.ManyToManyField(User)
     address_1 = models.CharField(max_length=50)
     address_2 = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -35,15 +40,15 @@ class Location(models.Model):
 class Course(models.Model):
     location = models.ForeignKey(Location)
     name = models.CharField(max_length=50)
-    instructors = models.ManyToManyField(Person, related_name="instructors")
-    students = models.ManyToManyField(Person, related_name="students")
+    instructors = models.ManyToManyField(User, related_name="instructors")
+    students = models.ManyToManyField(User, related_name="students")
 
     def __str__(self):
         return self.name
 
 class Session(models.Model):
     course = models.ForeignKey(Course)
-    students = models.ManyToManyField(Person)
+    students = models.ManyToManyField(User)
     startdatetime = models.DateTimeField()
     enddatetime = models.DateTimeField()
 

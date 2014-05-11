@@ -95,3 +95,7 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     BASE_DIR + '/templates/'
 )
+
+AUTH_PROFILE_MODULE = 'schools.Person'
+LOGIN_REDIRECT_URL = '/'
+#SOUTH_TESTS_MIGRATE = False

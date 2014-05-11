@@ -8,15 +8,12 @@ from django.utils.timezone import utc
 
 class TestModelRelations(TestCase):
     def setUp(self):
-        school_manager_user = Person.objects.create(first_name="Alex",last_name="Kyllo", user=User.objects.create_user("alexkyllo","alex@alexkyllo.com","password"))
+        school_manager_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo")
         cool_school = School.objects.create(name="A Cool School", manager=school_manager_user)
         cool_school_location = Location.objects.create(school=cool_school, name="Kirkland")
-        john_doe_user = User.objects.create_user('johndoe','johndoe@johndoe.com','password')
-        jane_doe_user = User.objects.create_user('janedoe','janedoe@janedoe.com','password')
-        bob_loblaw_user = User.objects.create_user('bobloblaw','bob@loblaw.com','password')
-        cool_school_instructor = Person.objects.create(user=john_doe_user, first_name="John", last_name="Doe")
-        cool_school_student_1 = Person.objects.create(user=jane_doe_user, first_name="Jane", last_name="Doe")
-        cool_school_student_2 = Person.objects.create(user=bob_loblaw_user, first_name="Bob", last_name="Loblaw")
+        cool_school_instructor = User.objects.create_user(username='johndoe', first_name="John", last_name="Doe")
+        cool_school_student_1 = User.objects.create_user(username='janedoe', first_name="Jane", last_name="Doe")
+        cool_school_student_2 = User.objects.create_user(username='bobloblaw', first_name="Bob", last_name="Loblaw")
         cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
         cool_school_course.instructors.add(cool_school_instructor)
         cool_school_course.students.add(cool_school_student_1)
@@ -39,20 +36,20 @@ class TestModelRelations(TestCase):
 
     def testCourseHasStudentAndInstructor(self):
         cool_school_course = Course.objects.get(name="Yoga 101")
-        cool_school_instructor = Person.objects.get(first_name="John", last_name="Doe")
-        cool_school_student = Person.objects.get(first_name="Jane", last_name="Doe")
+        cool_school_instructor = User.objects.get(username="johndoe")
+        cool_school_student = User.objects.get(username="janedoe")
 
         self.assertTrue(cool_school_instructor in cool_school_course.instructors.all())
         self.assertTrue(cool_school_student in cool_school_course.students.all())
-        self.assertEqual(str(cool_school_student), "Jane Doe")
-        self.assertEqual(str(cool_school_instructor), "John Doe")
+        self.assertEqual(str(cool_school_student.get_profile()), "Jane Doe")
+        self.assertEqual(str(cool_school_instructor.get_profile()), "John Doe")
 
     def testSessionHasStudents(self):
         dt = datetime(2014, 5, 9, 5, 35, 5, 730613)
         cool_school_course_session = Session.objects.get(startdatetime=dt)
         #cool_school_course_session = Session.objects.get(pk=1)
-        cool_school_student_1 = Person.objects.get(first_name="Jane", last_name="Doe")
-        cool_school_student_2 = Person.objects.get(first_name="Bob", last_name="Loblaw")
+        cool_school_student_1 = User.objects.get(first_name="Jane", last_name="Doe")
+        cool_school_student_2 = User.objects.get(first_name="Bob", last_name="Loblaw")
         self.assertTrue(cool_school_student_1 in cool_school_course_session.students.all())
         self.assertTrue(cool_school_student_2 in cool_school_course_session.students.all())
 
