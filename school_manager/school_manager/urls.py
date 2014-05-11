@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', logout_then_login),
     url(r'^accounts/register/$', register),
 
-    url(r'^schools/$', SchoolList.as_view()),
-    url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view()),
-    url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/')),
+    url(r'^schools/$', login_required(SchoolList.as_view())),
+    url(r'^schools/(?P<pk>\d+)/$', login_required(SchoolDetail.as_view())),
+    url(r'^schools/create/$', login_required(SchoolCreate.as_view(success_url='/schools/'))),
 )
