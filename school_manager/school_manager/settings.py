@@ -96,6 +96,8 @@ STATIC_ROOT = (
     BASE_DIR + '/static/'
 )
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'staticfiles'), )
+
 TEMPLATE_DIRS = (
     BASE_DIR + '/templates/'
 )
