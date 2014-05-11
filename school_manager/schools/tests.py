@@ -41,8 +41,8 @@ class TestModelRelations(TestCase):
 
         self.assertTrue(cool_school_instructor in cool_school_course.instructors.all())
         self.assertTrue(cool_school_student in cool_school_course.students.all())
-        self.assertEqual(str(cool_school_student.get_profile()), "Jane Doe")
-        self.assertEqual(str(cool_school_instructor.get_profile()), "John Doe")
+        self.assertEqual(cool_school_student.first_name, "Jane")
+        self.assertEqual(cool_school_instructor.first_name, "John")
 
     def testSessionHasStudents(self):
         dt = datetime(2014, 5, 9, 5, 35, 5, 730613)

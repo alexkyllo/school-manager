@@ -14,6 +14,5 @@ urlpatterns = patterns('',
     url(r'^schools/create/$', SchoolCreate.as_view()),
     url(r'^accounts/login/$',  login),
     url(r'^accounts/logout/$', logout_then_login),
-    url(r'^accounts/profile/$', PersonDetail.as_view()),
     url(r'^accounts/register/$', register),
 )

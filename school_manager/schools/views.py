@@ -16,9 +16,6 @@ class SchoolCreate(CreateView):
 	model = School
 	fields = ['name']
 
-class PersonDetail(DetailView):
-	model = Person
-
 def home(request):
 	template = loader.get_template('schools/index.html')
 	context = RequestContext(request, {
