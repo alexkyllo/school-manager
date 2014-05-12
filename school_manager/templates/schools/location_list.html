@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% for object in object_list %}
+<h2>Location List for {{ school_name }}</h2>
 <ul>
+{% for object in object_list %}
 <li><a href="{{ object.get_absolute_url }}">{{ object }}</a></li>
-</ul>
-  
 {% endfor %}
+</ul>
+<p><a href="/schools/{{ school_id }}/locations/create">Add a Location</a></p>
 {% endblock %}

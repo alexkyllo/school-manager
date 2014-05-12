@@ -31,7 +31,7 @@ class SchoolDelete(SchoolMixin, DeleteView):
 	pass
 
 class SchoolUpdate(SchoolMixin, UpdateView):
-	pass
+	form_class = SchoolForm
 
 class LocationMixin(object):
 	model = Location
@@ -46,25 +46,32 @@ class LocationMixin(object):
 			school_id=self.kwargs['school_id'],
 		)
 
-
 	def form_valid(self, form):
 		form.instance.school_id = self.kwargs.get('school_id')
 		return super(LocationMixin, self).form_valid(form)
 
 class LocationList(LocationMixin, ListView):
-	pass
+	def get_context_data(self, **kwargs):
+	    # Call the base implementation first to get a context
+	    context = super(LocationList, self).get_context_data(**kwargs)
+	    school_id=self.kwargs['school_id']
+	    school = School.objects.get(id=school_id)
+	    school_name = school.name
+	    context['school_name'] = school_name
+	    context['school_id'] = school_id 
+	    return context
 
 class LocationDetail(LocationMixin, DetailView):
 	pass
 
 class LocationCreate(LocationMixin, CreateView):
-	pass
+	form_class = LocationForm
 
 class LocationDelete(LocationMixin, DeleteView):
 	pass
 
 class LocationUpdate(LocationMixin, UpdateView):
-	pass
+	form_class = LocationForm
 
 def home(request):
 	template = loader.get_template('schools/index.html')
