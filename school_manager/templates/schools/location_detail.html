@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>School Detail for {{ object.name }}</h2>
+    <h2>Location Detail for {{ object.name }}</h2>
     <ul>
         <li>Name: {{ object.name }}</li>
     </ul>
     <a href="{{ object.get_absolute_url }}update/">Update {{ object.name }}</a>
     <a href="{{ object.get_absolute_url }}delete/">Delete {{ object.name }}</a>
-    <a href="{{ object.get_absolute_url }}locations/">Locations for {{ object.name }}</a>
 {% endblock %}

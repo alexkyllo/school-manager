@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Courses for {{ school.name }}</h2>
+    <ul>
+        {% for school in object_list %}
+            <li><a href="/schools/{{ school.pk }}/locations/{{ location.pk }}/courses/{{ course.pk }}" >{{ course.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
