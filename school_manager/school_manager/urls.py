@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
-    CourseList, CourseCreate,
+    CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
     register, 
 )
 from django.contrib import admin
@@ -32,27 +32,27 @@ urlpatterns = patterns('',
 urlpatterns += (
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/$',
-        view = LocationList.as_view(),
+        view = login_required(LocationList.as_view()),
         name = 'school_location_list',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
-        view =  LocationDetail.as_view(),
+        view =  login_required(LocationDetail.as_view()),
         name = 'school_location_detail',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
-        view =  LocationCreate.as_view(),
+        view =  login_required(LocationCreate.as_view()),
         name = 'school_location_create',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
-        view =  LocationDelete.as_view(),
+        view =  login_required(LocationDelete.as_view()),
         name = 'school_location_delete',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
-        view =  LocationUpdate.as_view(),
+        view =  login_required(LocationUpdate.as_view()),
         name = 'school_location_update',
         )
     )
@@ -60,14 +60,29 @@ urlpatterns += (
 #URL patterns for Course resources nested under locations
 urlpatterns += (
     url(
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/$',
-        view = CourseList.as_view(),
-        name = 'school_location_course_list',
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/create/$',
+        view = login_required(CourseCreate.as_view()),
+        name = 'school_location_course_create',
         ),
     url(
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/create/$',
-        view = CourseCreate.as_view(),
-        name = 'school_location_course_create',
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/$',
+        view = login_required(CourseList.as_view()),
+        name = 'school_location_course_list',
+        ),
+    url (
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/delete/$',
+        view =  login_required(CourseDelete.as_view()),
+        name = 'school_location_course_delete',
+        ),
+    url (
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/update/$',
+        view =  login_required(CourseUpdate.as_view()),
+        name = 'school_location_course_update',
+        ),
+    url (
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/$',
+        view =  login_required(CourseDetail.as_view()),
+        name = 'school_location_course_detail',
         ),
     )
 

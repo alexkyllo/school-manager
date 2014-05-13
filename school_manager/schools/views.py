@@ -40,7 +40,6 @@ class SchoolCreate(CreateView):
         form.instance.manager = self.request.user
         return super(SchoolCreate, self).form_valid(form)
 
-
 class SchoolCreate(SchoolMixin, CreateView):
     form_class = SchoolForm
 
@@ -110,7 +109,6 @@ class CourseMixin(object):
             })
 
     def get_queryset(self):
-        
         return Course.objects.filter(
             location_id=self.kwargs['location_id'],
         )
@@ -135,8 +133,17 @@ class CourseList(CourseMixin, ListView):
         context['location_name'] = location_name
         return context
 
-class CourseCreate(CourseMixin, ListView):
+class CourseCreate(CourseMixin, CreateView):
     form_class = CourseForm
+
+class CourseDelete(CourseMixin, DeleteView):
+    pass
+
+class CourseUpdate(CourseMixin, UpdateView):
+    form_class = CourseForm
+
+class CourseDetail(CourseMixin, DetailView):
+    pass
 
 #Function Based Views for homepage and register page
 

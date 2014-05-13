@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+Delete Course {{ course.name }}?
+{% endblock %}
+{% block content %}
+<p>Are you sure you want to delete {{ course.name }}?</p>
+
+	<form action="" method="post">
+		{% csrf_token %}
+		<input type="submit" value="Confirm"/>
+	</form>
+	<input type="button" value="Cancel" onclick="history.back(-1)"></button>
+
+{% endblock %}
