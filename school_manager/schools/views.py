@@ -62,9 +62,11 @@ class LocationMixin(object):
         return reverse('school_location_list', kwargs={'school_id': school_id[0]})
 
     def get_queryset(self):
-        
+        #Filter the query set so that it only returns locations for schools that are managed by the currently logged-in user
+        manager_schools = School.objects.filter(manager=self.request.user) 
         return Location.objects.filter(
-            school_id=self.kwargs['school_id'],
+            school__in=manager_schools
+            #school_id=self.kwargs['school_id'],
         )
 
     def form_valid(self, form):

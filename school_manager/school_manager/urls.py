@@ -29,6 +29,7 @@ urlpatterns = patterns('',
 )
 
 #URL patterns for Location resources nested under schools
+#TODO - Limit access to school's manager and return 404 to other school managers
 urlpatterns += (
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/$',
