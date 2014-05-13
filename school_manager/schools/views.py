@@ -6,22 +6,18 @@ creation and management of schools
 
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-<<<<<<< HEAD
 from django.views.generic import ListView, DetailView, CreateView
 from schools.models import School
 #from django import forms
 from schools.forms import SchoolForm
-=======
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from schools.models import School, Course, Location
 from django import forms
 from schools.forms import SchoolForm, CourseForm, LocationForm
->>>>>>> a3cedaecb0002fdd3a8966cf9fded95d640f3eb1
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
-<<<<<<< HEAD
 # This is the base school app view and should provide access
 # to school information
 
@@ -38,21 +34,23 @@ class SchoolList(ListView):
 class SchoolDetail(DetailView):
     """ The base class for viewing a school's detail"""
     model = School
-=======
+
+
 class SchoolMixin(object):
 	model = School
 
 	def get_queryset(self):
 		return School.objects.filter(manager=self.request.user)
 
+
 class SchoolList(SchoolMixin, ListView):
 	pass
->>>>>>> a3cedaecb0002fdd3a8966cf9fded95d640f3eb1
+
 
 class SchoolDetail(SchoolMixin, DetailView):
 	pass
 
-<<<<<<< HEAD
+
 class SchoolCreate(CreateView):
     """The base class for creating schools"""
     model = School
@@ -61,10 +59,11 @@ class SchoolCreate(CreateView):
         """ Check on the form """
         form.instance.manager = self.request.user
         return super(SchoolCreate, self).form_valid(form)
-=======
+
+
 class SchoolCreate(SchoolMixin, CreateView):
 	form_class = SchoolForm
->>>>>>> a3cedaecb0002fdd3a8966cf9fded95d640f3eb1
+
 
 # And then we have Function Based Views (FBV)
 
@@ -82,7 +81,7 @@ class LocationMixin(object):
 		return reverse('school_location_list', kwargs={'school_id': school_id[0]})
 
 	def get_queryset(self):
-		
+
 		return Location.objects.filter(
 			school_id=self.kwargs['school_id'],
 		)
@@ -99,7 +98,7 @@ class LocationList(LocationMixin, ListView):
 	    school = School.objects.get(id=school_id)
 	    school_name = school.name
 	    context['school_name'] = school_name
-	    context['school_id'] = school_id 
+	    context['school_id'] = school_id
 	    return context
 
 class LocationDetail(LocationMixin, DetailView):
