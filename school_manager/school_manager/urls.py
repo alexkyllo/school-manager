@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
+    CourseList, CourseCreate,
     register, 
 )
 from django.contrib import admin
@@ -27,39 +28,48 @@ urlpatterns = patterns('',
 
 )
 
+#URL patterns for Location resources nested under schools
 urlpatterns += (
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/$',
-        view = LocationList.as_view(
-            ),
+        view = LocationList.as_view(),
         name = 'school_location_list',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
-        view =  LocationDetail.as_view(
-            ),
+        view =  LocationDetail.as_view(),
         name = 'school_location_detail',
     ),
-   url (
+    url (
         regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
-        view =  LocationCreate.as_view(
-            ),
+        view =  LocationCreate.as_view(),
         name = 'school_location_create',
     ),
-   url (
+    url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
-        view =  LocationDelete.as_view(
-            ),
+        view =  LocationDelete.as_view(),
         name = 'school_location_delete',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
-        view =  LocationUpdate.as_view(
-            ),
+        view =  LocationUpdate.as_view(),
         name = 'school_location_update',
+        )
     )
-)
 
+#URL patterns for Course resources nested under locations
+urlpatterns += (
+    url(
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/$',
+        view = CourseList.as_view(),
+        name = 'school_location_course_list',
+        ),
+    url(
+        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/create/$',
+        view = CourseCreate.as_view(),
+        name = 'school_location_course_create',
+        ),
+    )
 
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()

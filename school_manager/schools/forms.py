@@ -14,4 +14,4 @@ class LocationForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        exclude = ('location',)
+        exclude = ('location','school','managers')

@@ -6,9 +6,6 @@ creation and management of schools
 
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import ListView, DetailView, CreateView
-from schools.models import School
-from schools.forms import SchoolForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from schools.models import School, Course, Location
 from django import forms
@@ -21,18 +18,7 @@ from django.core.urlresolvers import reverse
 # to school information
 
 # First we have Class Based Views
-
-
-class SchoolList(ListView):
-    """This view returns a list of all school based upon the current user"""
-    model = School
-    def get_queryset(self):
-        return School.objects.filter(manager=self.request.user)
-
-class SchoolDetail(DetailView):
-    """ The base class for viewing a school's detail"""
-    model = School
-
+# Views for School Model
 class SchoolMixin(object):
     model = School
 
@@ -68,6 +54,7 @@ class SchoolDelete(SchoolMixin, DeleteView):
 class SchoolUpdate(SchoolMixin, UpdateView):
     form_class = SchoolForm
 
+#Views for Location Model
 class LocationMixin(object):
     model = Location
 
@@ -107,6 +94,51 @@ class LocationDelete(LocationMixin, DeleteView):
 
 class LocationUpdate(LocationMixin, UpdateView):
     form_class = LocationForm
+
+#Views for Course Model
+class CourseMixin(object):
+    model = Course
+
+    def get_success_url(self):
+        school_id = self.kwargs.get('school_id'),
+        location_id = self.kwargs.get('location_id'),
+        return reverse(
+            'school_location_course_list', 
+            kwargs={
+                'school_id' : school_id[0], 
+                'location_id' : location_id[0],
+            })
+
+    def get_queryset(self):
+        
+        return Course.objects.filter(
+            location_id=self.kwargs['location_id'],
+        )
+
+    def form_valid(self, form):
+        form.instance.location_id = self.kwargs.get('location_id')
+        return super(CourseMixin, self).form_valid(form)
+
+class CourseList(CourseMixin, ListView):
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(CourseList, self).get_context_data(**kwargs)
+        school_id=self.kwargs['school_id']
+        #school = School.objects.get(id=school_id)
+        #school_name = school.name
+        location_id=self.kwargs['location_id']
+        location = Location.objects.get(id=location_id)
+        location_name = location.name
+        #context['school_name'] = school_name
+        context['school_id'] = school_id 
+        context['location_id'] = location_id
+        context['location_name'] = location_name
+        return context
+
+class CourseCreate(CourseMixin, ListView):
+    form_class = CourseForm
+
+#Function Based Views for homepage and register page
 
 def home(request):
     """This function renders the schools index.html"""
