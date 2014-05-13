@@ -8,7 +8,6 @@ from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView
 from schools.models import School
-#from django import forms
 from schools.forms import SchoolForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from schools.models import School, Course, Location
@@ -30,26 +29,21 @@ class SchoolList(ListView):
     def get_queryset(self):
         return School.objects.filter(manager=self.request.user)
 
-
 class SchoolDetail(DetailView):
     """ The base class for viewing a school's detail"""
     model = School
 
-
 class SchoolMixin(object):
-	model = School
+    model = School
 
-	def get_queryset(self):
-		return School.objects.filter(manager=self.request.user)
-
+    def get_queryset(self):
+        return School.objects.filter(manager=self.request.user)
 
 class SchoolList(SchoolMixin, ListView):
-	pass
-
+    pass
 
 class SchoolDetail(SchoolMixin, DetailView):
-	pass
-
+    pass
 
 class SchoolCreate(CreateView):
     """The base class for creating schools"""
@@ -62,56 +56,57 @@ class SchoolCreate(CreateView):
 
 
 class SchoolCreate(SchoolMixin, CreateView):
-	form_class = SchoolForm
+    form_class = SchoolForm
 
-
-# And then we have Function Based Views (FBV)
+    def form_valid(self, form):
+        form.instance.manager = self.request.user
+        return super(SchoolCreate, self).form_valid(form)
 
 class SchoolDelete(SchoolMixin, DeleteView):
-	pass
+    pass
 
 class SchoolUpdate(SchoolMixin, UpdateView):
-	form_class = SchoolForm
+    form_class = SchoolForm
 
 class LocationMixin(object):
-	model = Location
+    model = Location
 
-	def get_success_url(self):
-		school_id = self.kwargs.get('school_id'),
-		return reverse('school_location_list', kwargs={'school_id': school_id[0]})
+    def get_success_url(self):
+        school_id = self.kwargs.get('school_id'),
+        return reverse('school_location_list', kwargs={'school_id': school_id[0]})
 
-	def get_queryset(self):
+    def get_queryset(self):
+        
+        return Location.objects.filter(
+            school_id=self.kwargs['school_id'],
+        )
 
-		return Location.objects.filter(
-			school_id=self.kwargs['school_id'],
-		)
-
-	def form_valid(self, form):
-		form.instance.school_id = self.kwargs.get('school_id')
-		return super(LocationMixin, self).form_valid(form)
+    def form_valid(self, form):
+        form.instance.school_id = self.kwargs.get('school_id')
+        return super(LocationMixin, self).form_valid(form)
 
 class LocationList(LocationMixin, ListView):
-	def get_context_data(self, **kwargs):
-	    # Call the base implementation first to get a context
-	    context = super(LocationList, self).get_context_data(**kwargs)
-	    school_id=self.kwargs['school_id']
-	    school = School.objects.get(id=school_id)
-	    school_name = school.name
-	    context['school_name'] = school_name
-	    context['school_id'] = school_id
-	    return context
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(LocationList, self).get_context_data(**kwargs)
+        school_id=self.kwargs['school_id']
+        school = School.objects.get(id=school_id)
+        school_name = school.name
+        context['school_name'] = school_name
+        context['school_id'] = school_id 
+        return context
 
 class LocationDetail(LocationMixin, DetailView):
-	pass
+    pass
 
 class LocationCreate(LocationMixin, CreateView):
-	form_class = LocationForm
+    form_class = LocationForm
 
 class LocationDelete(LocationMixin, DeleteView):
-	pass
+    pass
 
 class LocationUpdate(LocationMixin, UpdateView):
-	form_class = LocationForm
+    form_class = LocationForm
 
 def home(request):
     """This function renders the schools index.html"""
@@ -132,4 +127,3 @@ def register(request):
     return render(request, "registration/register.html",
                   {'form': form,
                    })
-

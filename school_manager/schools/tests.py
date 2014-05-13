@@ -4,8 +4,6 @@ from datetime import datetime, timedelta
 from django.utils.timezone import utc
 
 
-# Create your tests here.
-
 class TestModelRelations(TestCase):
     def setUp(self):
         school_manager_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo")
@@ -59,3 +57,70 @@ class TestModelRelations(TestCase):
         #cool_school_course_session = Session.objects.get(pk=1)
         self.assertTrue(type(cool_school_course_session.startdatetime) == datetime)
         self.assertEqual(str(cool_school_course_session), "Yoga 101 on Friday, May 09 at 05:35:05")
+
+from django.test.client import RequestFactory, Client
+from schools.views import SchoolList
+
+class TestSchoolViews(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.client = Client()
+        self.valid_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo", password="42")
+        self.invalid_user = User.objects.create_user(username='root', first_name="root", last_name="root")
+
+    def testValidUserCanViewSchoolsList(self):
+        request = self.factory.get('/schools/')
+        request.user = self.valid_user
+        response = SchoolList.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def testInvalidUserCannotViewSchoolsList(self):
+        request = self.factory.get('/schools/')
+        request.user = self.invalid_user
+        response = SchoolList.as_view()(request)
+        print(response.context_data)
+        self.assertFalse(response.context_data['object_list'])
+        #self.assertRedirects(response, '/accounts/login/?next=/schools/', status_code=302, target_status_code=200)
+
+    def testValidUserCanCreateSchool(self):
+        self.client.login(username='alex', password='42')
+        self.client.post('/schools/create/', {"name": "Testing School"})
+        testing_school = School.objects.get(name='Testing School')
+        self.assertTrue(testing_school)
+
+    def testInvalidUserCannotCreateSchool(self):
+        self.client.login(username='root', password='password')
+        self.client.post('/schools/create/', {'name': 'Fake Testing School'})
+        #fake_testing_school = School.objects.get(name='Fake Testing School')
+        try: 
+            School.objects.get(name='Fake Testing School')
+        except:
+            self.assertTrue(True)
+
+    def testValidUserCanViewSchoolDetail(self):
+        request = self.factory.get('/schools/1/')
+        request.user = self.valid_user
+        response = SchoolList.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+
+class TestLocationViews(TestCase):
+    pass
+
+class TestAccounts(TestCase):
+    def setUp(self):
+        self.client = Client()
+        User.objects.create_user(username='dawn', first_name='Dawn', last_name='Kyllo', password='ruby')
+        
+    def testInvalidUserCannotLogIn(self):
+        self.assertEqual(self.client.login(username='root', password='password'), False)
+
+    def testValidUserCanLogIn(self):
+        self.assertTrue(self.client.login(username='dawn', password='ruby'))
+
+    def testUserCanRegister(self):
+        self.client.post('/accounts/register/', {'username': 'testuser1', 'password1': 'testpass', 'password2' : 'testpass'})
+        user = User.objects.get(username='testuser1')
+        self.assertTrue(user)
+
+
