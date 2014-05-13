@@ -4,7 +4,8 @@
     <h2>My Schools</h2>
     <ul>
         {% for school in object_list %}
-            <li>{{ school.name }} <a href="/schools/{{ school.pk }}" >Detail</a></li>
+            <li><a href="{{ school.get_absolute_url }}" >{{ school.name }}</a></li>
         {% endfor %}
     </ul>
+    <p><a href="/schools/create">Add a School</a></p>
 {% endblock %}

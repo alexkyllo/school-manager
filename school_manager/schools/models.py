@@ -11,6 +11,10 @@ class School(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('school_detail', args=[str(self.id)])
+
 class Location(models.Model):
     school = models.ForeignKey(School)
     name = models.CharField(max_length=50)
@@ -24,6 +28,12 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name    
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        #return reverse('location_detail', args=[str(self.id)])
+    
+        return reverse('school_location_detail', args=[str(self.school.id), str(self.id)])
 
 class Course(models.Model):
     location = models.ForeignKey(Location)
