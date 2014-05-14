@@ -13,13 +13,24 @@ from schools.forms import SchoolForm, CourseForm, LocationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+#from django.core.exceptions import PermissionDenied
 
 # This is the base school app view and should provide access
 # to school information
 
 # First we have Class Based Views
 # Views for School Model
-class SchoolMixin(object):
+
+
+class LoginRequiredMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+
+class SchoolMixin(LoginRequiredMixin, object):
     model = School
 
     def get_queryset(self):
@@ -54,7 +65,7 @@ class SchoolUpdate(SchoolMixin, UpdateView):
     form_class = SchoolForm
 
 #Views for Location Model
-class LocationMixin(object):
+class LocationMixin(LoginRequiredMixin, object):
     model = Location
 
     def get_success_url(self):
@@ -63,10 +74,10 @@ class LocationMixin(object):
 
     def get_queryset(self):
         #Filter the query set so that it only returns locations for schools that are managed by the currently logged-in user
-        manager_schools = School.objects.filter(manager=self.request.user) 
+        #manager_schools = School.objects.filter(manager=self.request.user) 
         return Location.objects.filter(
-            school__in=manager_schools
-            #school_id=self.kwargs['school_id'],
+            #school__in=manager_schools
+            school_id=self.kwargs['school_id'],
         )
 
     def form_valid(self, form):
@@ -97,7 +108,7 @@ class LocationUpdate(LocationMixin, UpdateView):
     form_class = LocationForm
 
 #Views for Course Model
-class CourseMixin(object):
+class CourseMixin(LoginRequiredMixin, object):
     model = Course
 
     def get_success_url(self):

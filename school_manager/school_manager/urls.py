@@ -20,11 +20,11 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', logout_then_login),
     url(r'^accounts/register/$', register),
 
-    url(r'^schools/$', login_required(SchoolList.as_view()), name='school_list'),
-    url(r'^schools/(?P<pk>\d+)/$', login_required(SchoolDetail.as_view()), name='school_detail'),
-    url(r'^schools/create/$', login_required(SchoolCreate.as_view(success_url='/schools/')), name='school_create'),
-    url(r'^schools/(?P<pk>\d+)/update/$', login_required(SchoolUpdate.as_view(success_url='/schools/')), name='school_update'),
-    url(r'^schools/(?P<pk>\d+)/delete/$', login_required(SchoolDelete.as_view(success_url='/schools/')), name='school_delete'),
+    url(r'^schools/$', SchoolList.as_view(), name='school_list'),
+    url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view(), name='school_detail'),
+    url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/'), name='school_create'),
+    url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
+    url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
 
 )
 
@@ -33,27 +33,27 @@ urlpatterns = patterns('',
 urlpatterns += (
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/$',
-        view = login_required(LocationList.as_view()),
+        view = LocationList.as_view(),
         name = 'school_location_list',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
-        view =  login_required(LocationDetail.as_view()),
+        view =  LocationDetail.as_view(),
         name = 'school_location_detail',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
-        view =  login_required(LocationCreate.as_view()),
+        view =  LocationCreate.as_view(),
         name = 'school_location_create',
     ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
-        view =  login_required(LocationDelete.as_view()),
+        view =  LocationDelete.as_view(),
         name = 'school_location_delete',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
-        view =  login_required(LocationUpdate.as_view()),
+        view =  LocationUpdate.as_view(),
         name = 'school_location_update',
         )
     )
@@ -62,27 +62,27 @@ urlpatterns += (
 urlpatterns += (
     url(
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/create/$',
-        view = login_required(CourseCreate.as_view()),
+        view = CourseCreate.as_view(),
         name = 'school_location_course_create',
         ),
     url(
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/$',
-        view = login_required(CourseList.as_view()),
+        view = CourseList.as_view(),
         name = 'school_location_course_list',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/delete/$',
-        view =  login_required(CourseDelete.as_view()),
+        view =  CourseDelete.as_view(),
         name = 'school_location_course_delete',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/update/$',
-        view =  login_required(CourseUpdate.as_view()),
+        view =  CourseUpdate.as_view(),
         name = 'school_location_course_update',
         ),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/$',
-        view =  login_required(CourseDetail.as_view()),
+        view =  CourseDetail.as_view(),
         name = 'school_location_course_detail',
         ),
     )
