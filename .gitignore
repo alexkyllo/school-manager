@@ -58,3 +58,6 @@ school_manager/db.sqlite3
 
 #Mac system files
 *.DS_Store
+
+# IDE
+.idea
