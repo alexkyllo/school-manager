@@ -15,15 +15,12 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404
-#from django.core.exceptions import PermissionDenied
 
 # This is the base school app view and should provide access
 # to school information
 
 # First we have Class Based Views
 # Views for School Model
-
 
 class LoginRequiredMixin(object):
     @method_decorator(login_required)
@@ -41,15 +38,6 @@ class SchoolList(SchoolMixin, ListView):
 
 class SchoolDetail(SchoolMixin, DetailView):
     pass
-
-class SchoolCreate(CreateView):
-    """The base class for creating schools"""
-    model = School
-    form_class = SchoolForm
-    def form_valid(self, form):
-        """ Check on the form """
-        form.instance.manager = self.request.user
-        return super(SchoolCreate, self).form_valid(form)
 
 class SchoolCreate(SchoolMixin, CreateView):
     form_class = SchoolForm
