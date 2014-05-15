@@ -87,5 +87,27 @@ urlpatterns += (
         ),
     )
 
+#URL routes for API
+from rest_framework import routers
+from schools.views import (
+    SchoolViewSet, LocationViewSet, UserViewSet, GroupViewSet, CourseViewSet
+    )
+from django.conf.urls import patterns, url, include
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'schools', SchoolViewSet)
+router.register(r'locations', LocationViewSet)
+router.register(r'courses', CourseViewSet)
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browseable API.
+urlpatterns += (
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+)
+
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()

@@ -7,6 +7,7 @@ creation and management of schools
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.models import User, Group
 from schools.models import School, Course, Location
 from django import forms
 from schools.forms import SchoolForm, CourseForm, LocationForm
@@ -167,3 +168,45 @@ def register(request):
     return render(request, "registration/register.html",
                   {'form': form,
                    })
+
+# CBVs for API Viewsets
+from rest_framework import viewsets
+from schools.serializers import (
+    UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer
+)
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+class SchoolViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows schools to be viewed or edited.
+    """
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+class LocationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows locations to be viewed or edited.
+    """
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+
+class CourseViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Courses to be viewed or edited.
+    """
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
