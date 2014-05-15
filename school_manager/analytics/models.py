@@ -9,7 +9,7 @@ class Analysis(models.Model):
     startdatetime = models.DateTimeField()
     enddatetime = models.DateTimeField()
     group = models.CharField(max_length=50)
-
+    active_users_now = models.IntegerField()
 
     def __str__(self):
         """Name of the model class"""
