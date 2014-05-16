@@ -10,11 +10,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.models import User, Group
 from schools.models import School, Course, Location
 from django import forms
-from schools.forms import SchoolForm, CourseForm, LocationForm
-from django.contrib.auth.forms import UserCreationForm
+from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout
 from django.utils.decorators import method_decorator
 
 # This is the base school app view and should provide access
@@ -158,13 +158,16 @@ def home(request):
 
 def register(request):
     """ Base register function for schools"""
+    if request.user.is_authenticated():
+        logout(request)
+
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = ManagerCreationForm(request.POST) #UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/")
     else:
-        form = UserCreationForm()
+        form = ManagerCreationForm()
     return render(request, "registration/register.html",
                   {'form': form,
                    })
@@ -184,6 +187,7 @@ class UserViewSet(viewsets.ModelViewSet):
     model = User
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, IsManager,)
+
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
     
