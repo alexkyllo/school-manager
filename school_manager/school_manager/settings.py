@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'schools',
     'analytics',
     'south',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (

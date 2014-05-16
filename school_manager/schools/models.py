@@ -16,7 +16,7 @@ class School(models.Model):
         return reverse('school_detail', args=[str(self.id)])
 
 class Location(models.Model):
-    school = models.ForeignKey(School)
+    school = models.ForeignKey(School, related_name='locations')
     name = models.CharField(max_length=50)
     managers = models.ManyToManyField(User)
     address_1 = models.CharField(max_length=50)
@@ -35,7 +35,7 @@ class Location(models.Model):
         return reverse('school_location_detail', args=[str(self.school.id), str(self.id)])
 
 class Course(models.Model):
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, related_name='courses')
     name = models.CharField(max_length=50)
     instructors = models.ManyToManyField(User, related_name="instructors")
     students = models.ManyToManyField(User, related_name="students")
