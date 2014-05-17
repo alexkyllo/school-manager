@@ -3,7 +3,7 @@ from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
     CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
-    register, 
+    register, home
 )
 from django.contrib import admin
 admin.autodiscover()
@@ -14,7 +14,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from schools.models import School
 
 urlpatterns = patterns('',
-    url(r'^$', 'schools.views.home', name='home'),
+    url(r'^$', login_required(home)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout_then_login),

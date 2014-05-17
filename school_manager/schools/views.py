@@ -15,6 +15,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
 
 # This is the base school app view and should provide access
@@ -154,6 +155,13 @@ def home(request):
     template = loader.get_template('schools/index.html')
     context = RequestContext(request, {
     })
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+
     return HttpResponse(template.render(context))
 
 def register(request):
