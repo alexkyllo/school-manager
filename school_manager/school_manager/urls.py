@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout_then_login),
     url(r'^accounts/register/$', register),
+    url(r'^analytics/', include('analytics.urls')),
 
     url(r'^schools/$', SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view(), name='school_detail'),
