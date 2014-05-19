@@ -3,7 +3,7 @@ from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
     CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
-    register, 
+    register, home
 )
 from django.contrib import admin
 admin.autodiscover()
@@ -14,7 +14,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from schools.models import School
 
 urlpatterns = patterns('',
-    url(r'^$', 'schools.views.home', name='home'),
+    url(r'^$', login_required(home)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout_then_login),
@@ -91,13 +91,15 @@ urlpatterns += (
 #URL routes for API
 from rest_framework import routers
 from schools.views import (
-    SchoolViewSet, LocationViewSet, UserViewSet, GroupViewSet, CourseViewSet
+    SchoolViewSet, LocationViewSet, UserViewSet, StudentViewSet, InstructorViewSet, GroupViewSet, CourseViewSet,
     )
 from django.conf.urls import patterns, url, include
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'instructors', InstructorViewSet, base_name='instructors')
+router.register(r'students', StudentViewSet, base_name='students')
 router.register(r'groups', GroupViewSet)
 router.register(r'schools', SchoolViewSet)
 router.register(r'locations', LocationViewSet)

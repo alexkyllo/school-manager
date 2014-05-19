@@ -1,5 +1,7 @@
 from django import forms
-from schools.models import School, Location, Course
+from schools.models import School, Location, Course 
+from django.contrib.auth.models import Group
+from django.contrib.auth.forms import UserCreationForm
 
 class SchoolForm(forms.ModelForm):
     class Meta:
@@ -15,3 +17,13 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         exclude = ('location','school','managers')
+
+class ManagerCreationForm(UserCreationForm):
+    def save(self, commit=True):
+        user = super(UserCreationForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        managers = Group.objects.get(name='Managers')
+        if commit:
+            user.save()
+            user.groups.add(managers)
+        return user

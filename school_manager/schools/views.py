@@ -10,11 +10,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.models import User, Group
 from schools.models import School, Course, Location
 from django import forms
-from schools.forms import SchoolForm, CourseForm, LocationForm
-from django.contrib.auth.forms import UserCreationForm
+from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
 
 # This is the base school app view and should provide access
@@ -154,17 +155,27 @@ def home(request):
     template = loader.get_template('schools/index.html')
     context = RequestContext(request, {
     })
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+
     return HttpResponse(template.render(context))
 
 def register(request):
     """ Base register function for schools"""
+    if request.user.is_authenticated():
+        logout(request)
+
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = ManagerCreationForm(request.POST) #UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/")
     else:
-        form = UserCreationForm()
+        form = ManagerCreationForm()
     return render(request, "registration/register.html",
                   {'form': form,
                    })
@@ -173,7 +184,7 @@ def register(request):
 from rest_framework import viewsets, permissions
 from schools.permissions import IsManager
 from schools.serializers import (
-    UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer
+    UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer,
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -184,6 +195,7 @@ class UserViewSet(viewsets.ModelViewSet):
     model = User
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, IsManager,)
+
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
     
@@ -201,7 +213,6 @@ class SchoolViewSet(viewsets.ModelViewSet):
     API endpoint that allows schools to be viewed or edited.
     """
     model = School
-    #queryset = School.objects.all()
     serializer_class = SchoolSerializer
     permission_classes = (permissions.IsAuthenticated, IsManager,)
     def pre_save(self, obj):
@@ -210,13 +221,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return School.objects.filter(manager_id=self.request.user.id)
 
-
 class LocationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows locations to be viewed or edited.
     """
     model = Location
-    #queryset = Location.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = LocationSerializer
     def get_queryset(self):
@@ -228,10 +237,31 @@ class CourseViewSet(viewsets.ModelViewSet):
     API endpoint that allows Courses to be viewed or edited.
     """
     model = Course
-    #queryset = Course.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CourseSerializer
     def get_queryset(self):
         user_schools = School.objects.filter(manager_id=self.request.user.id)
         school_locations = Location.objects.filter(school__in=user_schools)
         return Course.objects.filter(location__in=school_locations)
+
+class StudentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Users in the Students group to be viewed or edited.
+    """
+    model = User
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    def get_queryset(self):
+        student_group = Group.objects.get(name='Students')
+        return User.objects.filter(groups=student_group)
+
+class InstructorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Users in the Students group to be viewed or edited.
+    """
+    model = User
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+    def get_queryset(self):
+        instructor_group = Group.objects.get(name='Instructors')
+        return User.objects.filter(groups=instructor_group)

@@ -8,7 +8,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('url', 'username', 'email', 'groups')
 
-
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
@@ -27,7 +26,7 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('url', 'name', 'managers', 'courses','address_1', 'address_2', 'city', 'state_province', 'zip_postal_code', 'country')
+        fields = ('url', 'school', 'name', 'managers', 'courses','address_1', 'address_2', 'city', 'state_province', 'zip_postal_code', 'country')
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
