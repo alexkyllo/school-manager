@@ -107,3 +107,9 @@ TEMPLATE_DIRS = (
 #AUTH_PROFILE_MODULE = 'schools.Person' #actually this is deprecated as of Django 1.5
 LOGIN_REDIRECT_URL = '/'
 #SOUTH_TESTS_MIGRATE = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}

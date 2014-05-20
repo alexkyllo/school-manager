@@ -6,7 +6,9 @@ from django.db.models.signals import post_save
 
 class School(models.Model):
     name = models.CharField(max_length=80)
-    manager = models.ForeignKey(User, related_name="manager")
+    manager = models.ForeignKey(User, related_name='manager')
+    students = models.ManyToManyField(User, related_name='school_students')
+    instructors = models.ManyToManyField(User, related_name='school_instructors')
 
     def __str__(self):
         return self.name
@@ -20,7 +22,7 @@ class Location(models.Model):
     name = models.CharField(max_length=50)
     managers = models.ManyToManyField(User)
     address_1 = models.CharField(max_length=50)
-    address_2 = models.CharField(max_length=50)
+    address_2 = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=50)
     state_province = models.CharField(max_length=4)
     zip_postal_code = models.CharField(max_length=10)
@@ -35,10 +37,11 @@ class Location(models.Model):
         return reverse('school_location_detail', args=[str(self.school.id), str(self.id)])
 
 class Course(models.Model):
+    school = models.ForeignKey(School)
     location = models.ForeignKey(Location, related_name='courses')
     name = models.CharField(max_length=50)
-    instructors = models.ManyToManyField(User, related_name="instructors")
-    students = models.ManyToManyField(User, related_name="students")
+    instructors = models.ManyToManyField(User, related_name="course_instructors")
+    students = models.ManyToManyField(User, related_name="course_students")
 
     def __str__(self):
         return self.name
@@ -49,6 +52,7 @@ class Course(models.Model):
         return reverse('school_location_course_detail', args=[str(self.location.school.id), str(self.location.id), str(self.id)])
 
 class Session(models.Model):
+    school = models.ForeignKey(School)
     course = models.ForeignKey(Course)
     students = models.ManyToManyField(User)
     startdatetime = models.DateTimeField()
