@@ -33,7 +33,7 @@ class SchoolMixin(LoginRequiredMixin, object):
     model = School
 
     def get_queryset(self):
-        return School.objects.filter(manager=self.request.user)
+        return School.objects.filter(members=self.request.user)
 
 class SchoolList(SchoolMixin, ListView):
     pass
@@ -45,7 +45,9 @@ class SchoolCreate(SchoolMixin, CreateView):
     form_class = SchoolForm
 
     def form_valid(self, form):
-        form.instance.manager = self.request.user
+        self.object = form.save(commit=False)
+        self.object.save()
+        self.object.members = [self.request.user,]
         return super(SchoolCreate, self).form_valid(form)
 
 class SchoolDelete(SchoolMixin, DeleteView):
@@ -125,12 +127,9 @@ class CourseList(CourseMixin, ListView):
         # Call the base implementation first to get a context
         context = super(CourseList, self).get_context_data(**kwargs)
         school_id=self.kwargs['school_id']
-        #school = School.objects.get(id=school_id)
-        #school_name = school.name
         location_id=self.kwargs['location_id']
         location = Location.objects.get(id=location_id)
         location_name = location.name
-        #context['school_name'] = school_name
         context['school_id'] = school_id 
         context['location_id'] = location_id
         context['location_name'] = location_name
@@ -182,7 +181,7 @@ def register(request):
 
 # CBVs for API Viewsets
 from rest_framework import viewsets, permissions
-from schools.permissions import IsSchoolManager, IsSchoolMember
+from schools.permissions import IsManager, IsMember
 from schools.serializers import (
     UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer,
 )
@@ -191,10 +190,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    #queryset = get_queryset()
     model = User
     serializer_class = UserSerializer
-    permission_classes = (IsSchoolManager,)
+    permission_classes = (IsManager,)
 
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
@@ -206,7 +204,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = (IsSchoolManager)
+    permission_classes = (IsManager,)
 
 class SchoolViewSet(viewsets.ModelViewSet):
     """
@@ -214,54 +212,49 @@ class SchoolViewSet(viewsets.ModelViewSet):
     """
     model = School
     serializer_class = SchoolSerializer
-    permission_classes = (IsSchoolManager,)
+    permission_classes = (IsManager, IsMember,)
     def pre_save(self, obj):
-        obj.manager = self.request.user
+        obj.members += self.request.user
 
     def get_queryset(self):
-        return School.objects.filter(manager_id=self.request.user.id)
+        return School.objects.filter(members__id=self.request.user.id)
 
 class LocationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows locations to be viewed or edited.
     """
     model = Location
-    permission_classes = (IsSchoolMember,)
+    permission_classes = (IsMember,)
     serializer_class = LocationSerializer
     def get_queryset(self):
-        user_schools = School.objects.filter(manager_id=self.request.user.id)
-        return Location.objects.filter(school__in=user_schools)
+        return Location.objects.filter(school__members__id=self.request.user.id)
 
 class CourseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Courses to be viewed or edited.
     """
     model = Course
-    permission_classes = (IsSchoolMember,)
+    permission_classes = (IsMember,)
     serializer_class = CourseSerializer
     def get_queryset(self):
-        user_schools = School.objects.filter(manager_id=self.request.user.id)
-        school_locations = Location.objects.filter(school__in=user_schools)
-        return Course.objects.filter(location__in=school_locations)
+        return Course.objects.filter(location__school__members__id=self.request.user.id)
 
 class StudentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Users in the Students group to be viewed or edited.
     """
     model = User
-    permission_classes = (IsSchoolManager,)
+    permission_classes = (IsManager, IsMember,)
     serializer_class = UserSerializer
     def get_queryset(self):
-        student_group = Group.objects.get(name='Students')
-        return User.objects.filter(groups=student_group)
+        return User.objects.filter(groups__name='Students', school__members=self.request.user)
 
 class InstructorViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Users in the Students group to be viewed or edited.
     """
     model = User
-    permission_classes = (IsSchoolManager,)
+    permission_classes = (IsManager,)
     serializer_class = UserSerializer
     def get_queryset(self):
-        instructor_group = Group.objects.get(name='Instructors')
-        return User.objects.filter(groups=instructor_group)
+        return User.objects.filter(groups__name='Instructors')

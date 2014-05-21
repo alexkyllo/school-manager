@@ -6,17 +6,17 @@ from django.contrib.auth.forms import UserCreationForm
 class SchoolForm(forms.ModelForm):
     class Meta:
         model = School
-        exclude = ('manager',)
+        exclude = ('members',)
 
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
-        exclude = ('school','managers')
+        exclude = ('school',)
 
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        exclude = ('location','school','managers')
+        exclude = ('location','school',)
 
 class ManagerCreationForm(UserCreationForm):
     def save(self, commit=True):

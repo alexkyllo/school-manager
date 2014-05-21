@@ -1,6 +1,7 @@
 from rest_framework import permissions
+from schools.models import School
 
-class IsSchoolManager(permissions.BasePermission):
+class IsManager(permissions.BasePermission):
     """
     Object-level permission to only allow owners of an object to see it.
     Assumes the model instance has a `manager` attribute.
@@ -13,8 +14,9 @@ class IsSchoolManager(permissions.BasePermission):
         #    return True
 
         # Instance must have an attribute named `manager`.
-        return obj.manager == request.user
+        return "Managers" in request.user.groups
 
-class IsSchoolMember(permissions.BasePermission):
+class IsMember(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.school == request.user.school
+        user_schools = School.objects.filter(members__id=request.user.id)
+        return obj.school in user_schools

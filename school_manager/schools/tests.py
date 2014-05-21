@@ -1,22 +1,34 @@
 from django.test import TestCase
 from schools.models import *
+from django.contrib.auth.models import Group
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
 
 
 class TestModelRelations(TestCase):
     def setUp(self):
-        school_manager_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo")
-        cool_school = School.objects.create(name="A Cool School", manager=school_manager_user)
+        managers_group = Group.objects.create(name="Managers")
+        students_group = Group.objects.create(name="Students")
+        instructors_group = Group.objects.create(name="Instructors")
+
+
+        school_manager_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo",)
+        school_manager_user.groups.add(managers_group)
+        cool_school = School.objects.create(name="A Cool School")
+        cool_school.members.add(school_manager_user)
         cool_school_location = Location.objects.create(school=cool_school, name="Kirkland")
         cool_school_instructor = User.objects.create_user(username='johndoe', first_name="John", last_name="Doe")
+        cool_school_instructor.groups.add(instructors_group)
         cool_school_student_1 = User.objects.create_user(username='janedoe', first_name="Jane", last_name="Doe")
         cool_school_student_2 = User.objects.create_user(username='bobloblaw', first_name="Bob", last_name="Loblaw")
-        cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location)
+        
+        cool_school_student_1.groups.add(students_group)
+        cool_school_student_2.groups.add(students_group)
+        cool_school_course = Course.objects.create(name="Yoga 101", location=cool_school_location, school=cool_school)
         cool_school_course.instructors.add(cool_school_instructor)
         cool_school_course.students.add(cool_school_student_1)
         dt = datetime(2014, 5, 9, 5, 35, 5, 730613)
-        cool_school_course_session = Session.objects.create(course=cool_school_course, startdatetime=dt, enddatetime=dt+timedelta(hours=1))
+        cool_school_course_session = Session.objects.create(course=cool_school_course, school=cool_school, startdatetime=dt, enddatetime=dt+timedelta(hours=1))
         cool_school_course_session.students.add(cool_school_student_1)
         cool_school_course_session.students.add(cool_school_student_2)
 
@@ -66,6 +78,8 @@ class TestSchoolViews(TestCase):
         self.factory = RequestFactory()
         self.client = Client()
         self.valid_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo", password="42")
+        managers_group = Group.objects.create(name="Managers")
+        self.valid_user.groups.add(managers_group)
         self.invalid_user = User.objects.create_user(username='root', first_name="root", last_name="root")
 
     def testValidUserCanViewSchoolsList(self):
@@ -110,6 +124,7 @@ class TestLocationViews(TestCase):
 class TestAccounts(TestCase):
     def setUp(self):
         self.client = Client()
+        Group.objects.create(name="Managers")
         User.objects.create_user(username='dawn', first_name='Dawn', last_name='Kyllo', password='ruby')
         
     def testInvalidUserCannotLogIn(self):
@@ -119,7 +134,7 @@ class TestAccounts(TestCase):
         self.assertTrue(self.client.login(username='dawn', password='ruby'))
 
     def testUserCanRegister(self):
-        self.client.post('/accounts/register/', {'username': 'testuser1', 'password1': 'testpass', 'password2' : 'testpass'})
+        self.client.post('/accounts/register/', {'username': 'testuser1', 'password1': 'testpass', 'password2' : 'testpass',})
         user = User.objects.get(username='testuser1')
         self.assertTrue(user)
 

@@ -6,9 +6,7 @@ from django.db.models.signals import post_save
 
 class School(models.Model):
     name = models.CharField(max_length=80)
-    manager = models.ForeignKey(User, related_name='manager')
-    students = models.ManyToManyField(User, related_name='school_students')
-    instructors = models.ManyToManyField(User, related_name='school_instructors')
+    members = models.ManyToManyField(User)
 
     def __str__(self):
         return self.name
@@ -20,7 +18,6 @@ class School(models.Model):
 class Location(models.Model):
     school = models.ForeignKey(School, related_name='locations')
     name = models.CharField(max_length=50)
-    managers = models.ManyToManyField(User)
     address_1 = models.CharField(max_length=50)
     address_2 = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=50)

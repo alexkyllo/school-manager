@@ -15,18 +15,17 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class SchoolSerializer(serializers.HyperlinkedModelSerializer):
     locations = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='location-detail')
-    manager = serializers.Field(source='manager.username')
 
     class Meta:
         model = School
-        fields = ('url', 'name', 'manager', 'locations')
+        fields = ('url', 'name', 'locations')
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
     courses = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='course-detail')
 
     class Meta:
         model = Location
-        fields = ('url', 'school', 'name', 'managers', 'courses','address_1', 'address_2', 'city', 'state_province', 'zip_postal_code', 'country')
+        fields = ('url', 'school', 'name', 'courses','address_1', 'address_2', 'city', 'state_province', 'zip_postal_code', 'country')
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
