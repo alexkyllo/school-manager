@@ -46,7 +46,7 @@ class Course(models.Model):
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
     
-        return reverse('school_location_course_detail', args=[str(self.location.school.id), str(self.location.id), str(self.id)])
+        return reverse('course_detail', args=[str(self.id)])
 
 class Session(models.Model):
     school = models.ForeignKey(School)

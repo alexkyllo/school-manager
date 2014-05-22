@@ -21,76 +21,27 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', register),
     url(r'^analytics/', include('analytics.urls')),
 
+    #School resources
     url(r'^schools/$', SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view(), name='school_detail'),
     url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/'), name='school_create'),
     url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
+
+    #Location resources
     url(r'^locations/$', LocationList.as_view(), name='location_list'),
     url(r'^locations/(?P<pk>\d+)/$', LocationDetail.as_view(), name='location_detail'),
     url(r'^locations/create/$', LocationCreate.as_view(), name='location_create'),
     url(r'^locations/(?P<pk>\d+)/update/$', LocationUpdate.as_view(), name='location_update'),
     url(r'^locations/(?P<pk>\d+)/delete/$', LocationDelete.as_view(), name='location_delete'),
+
+    #Course resources
+    url(r'^courses/$', CourseList.as_view(), name='course_list'),
+    url(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
+    url(r'^courses/create/$', CourseCreate.as_view(), name='course_create'),
+    url(r'^courses/(?P<pk>\d+)/update/$', CourseUpdate.as_view(), name='course_update'),
+    url(r'^courses/(?P<pk>\d+)/delete/$', CourseDelete.as_view(), name='course_delete'),
 )
-
-#URL patterns for Location resources nested under schools
-#TODO - Limit access to school's manager and return 404 to other school managers
-urlpatterns += (
-    #url (
-    #    regex = r'^schools/(?P<school_id>\d+)/locations/$',
-    #    view = LocationList.as_view(),
-    #    name = 'school_location_list',
-    #),
-    #url (
-    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
-    #    view =  LocationDetail.as_view(),
-    #    name = 'school_location_detail',
-    #),
-    #url (
-    #    regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
-    #    view =  LocationCreate.as_view(),
-    #    name = 'school_location_create',
-    #),
-    #url (
-    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
-    #    view =  LocationDelete.as_view(),
-    #    name = 'school_location_delete',
-    #    ),
-    #url (
-    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
-    #    view =  LocationUpdate.as_view(),
-    #    name = 'school_location_update',
-    #    )
-    )
-
-#URL patterns for Course resources nested under locations
-urlpatterns += (
-    url(
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/create/$',
-        view = CourseCreate.as_view(),
-        name = 'school_location_course_create',
-        ),
-    url(
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/$',
-        view = CourseList.as_view(),
-        name = 'school_location_course_list',
-        ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/delete/$',
-        view =  CourseDelete.as_view(),
-        name = 'school_location_course_delete',
-        ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/update/$',
-        view =  CourseUpdate.as_view(),
-        name = 'school_location_course_update',
-        ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<location_id>\d+)/courses/(?P<pk>\d+)/$',
-        view =  CourseDetail.as_view(),
-        name = 'school_location_course_detail',
-        ),
-    )
 
 #URL routes for API
 from rest_framework import routers

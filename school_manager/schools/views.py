@@ -11,7 +11,7 @@ from django.contrib.auth.models import User, Group
 from schools.models import School, Course, Location
 from django import forms
 from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
@@ -70,7 +70,9 @@ class LocationMixin(LoginRequiredMixin, object):
         return Location.objects.filter(school__members=self.request.user)
 
     def form_valid(self, form):
-        form.instance.school_id = self.kwargs.get('school_id')
+        form.instance.school_id = self.request.GET['school']
+        membership = get_object_or_404(School, id=form.instance.school_id, members=self.request.user)
+
         return super(LocationMixin, self).form_valid(form)
 
 class LocationList(LocationMixin, ListView):
@@ -84,8 +86,7 @@ class LocationList(LocationMixin, ListView):
         except:
             raise Http404
 
-        school_name = school.name
-        context['school_name'] = school_name
+        context['school_name'] = school.name
         context['school_id'] = school_id 
         return context
 
@@ -105,36 +106,39 @@ class LocationUpdate(LocationMixin, UpdateView):
 class CourseMixin(LoginRequiredMixin, object):
     model = Course
 
-    def get_success_url(self):
-        school_id = self.kwargs.get('school_id'),
-        location_id = self.kwargs.get('location_id'),
-        return reverse(
-            'school_location_course_list', 
-            kwargs={
-                'school_id' : school_id[0], 
-                'location_id' : location_id[0],
-            })
+    #def get_success_url(self):
+    #    school_id = self.request.get('school_id'),
+    #    location_id = self.kwargs.get('location_id'),
+    #    return reverse(
+    #        'school_location_course_list', 
+    #        kwargs={
+    #            'school_id' : school_id[0], 
+    #            'location_id' : location_id[0],
+    #        })
 
     def get_queryset(self):
-        return Course.objects.filter(
-            location_id=self.kwargs['location_id'],
-        )
+        return Course.objects.filter(location__school__members=self.request.user)
 
     def form_valid(self, form):
-        form.instance.location_id = self.kwargs.get('location_id')
+        form.instance.location_id = self.request.GET['location']
+        location = get_object_or_404(Location, id=form.instance.location_id, school__members=self.request.user)
+        form.instance.school_id = location.school.id
+        
         return super(CourseMixin, self).form_valid(form)
 
 class CourseList(CourseMixin, ListView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
+
         context = super(CourseList, self).get_context_data(**kwargs)
-        school_id=self.kwargs['school_id']
-        location_id=self.kwargs['location_id']
-        location = Location.objects.get(id=location_id)
-        location_name = location.name
-        context['school_id'] = school_id 
+        try:
+            location_id = self.request.GET['location']
+            location = Location.objects.get(id=location_id)
+        except:
+            raise Http404
+
         context['location_id'] = location_id
-        context['location_name'] = location_name
+        context['location_name'] = location.name
         return context
 
 class CourseCreate(CourseMixin, CreateView):
