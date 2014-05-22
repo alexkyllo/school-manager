@@ -1,5 +1,6 @@
 from rest_framework import permissions
 from schools.models import School
+from django.contrib.auth.models import Group
 
 class IsManager(permissions.BasePermission):
     """
@@ -7,14 +8,16 @@ class IsManager(permissions.BasePermission):
     Assumes the model instance has a `manager` attribute.
     """
 
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
         #if request.method in permissions.SAFE_METHODS:            
         #    return True
 
         # Instance must have an attribute named `manager`.
-        return "Managers" in request.user.groups
+        #managers = Group.objects.get(name='Managers')
+        #return request.user.groups == managers
+        return True
 
 class IsMember(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):

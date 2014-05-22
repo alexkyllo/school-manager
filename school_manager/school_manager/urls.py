@@ -26,17 +26,17 @@ urlpatterns = patterns('',
     url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/'), name='school_create'),
     url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
-
+    url(r'^locations/$', LocationList.as_view(), name='location_list'),
 )
 
 #URL patterns for Location resources nested under schools
 #TODO - Limit access to school's manager and return 404 to other school managers
 urlpatterns += (
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/$',
-        view = LocationList.as_view(),
-        name = 'school_location_list',
-    ),
+    #url (
+    #    regex = r'^schools/(?P<school_id>\d+)/locations/$',
+    #    view = LocationList.as_view(),
+    #    name = 'school_location_list',
+    #),
     url (
         regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
         view =  LocationDetail.as_view(),

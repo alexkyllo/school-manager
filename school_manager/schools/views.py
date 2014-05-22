@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
+from django.http import Http404
 
 # This is the base school app view and should provide access
 # to school information
@@ -60,28 +61,29 @@ class SchoolUpdate(SchoolMixin, UpdateView):
 class LocationMixin(LoginRequiredMixin, object):
     model = Location
 
-    def get_success_url(self):
-        school_id = self.kwargs.get('school_id'),
-        return reverse('school_location_list', kwargs={'school_id': school_id[0]})
+    #def get_success_url(self):
+    #    school_id = self.kwargs.get('school_id'),
+    #    return reverse('school_location_list', kwargs={'school_id': school_id[0]})
 
     def get_queryset(self):
         #Filter the query set so that it only returns locations for schools that are managed by the currently logged-in user
-        #manager_schools = School.objects.filter(manager=self.request.user) 
-        return Location.objects.filter(
-            #school__in=manager_schools
-            school_id=self.kwargs['school_id'],
-        )
+        return Location.objects.filter(school__members=self.request.user)
 
     def form_valid(self, form):
         form.instance.school_id = self.kwargs.get('school_id')
         return super(LocationMixin, self).form_valid(form)
 
 class LocationList(LocationMixin, ListView):
+    #pass
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LocationList, self).get_context_data(**kwargs)
-        school_id=self.kwargs['school_id']
-        school = School.objects.get(id=school_id)
+        try:
+            school_id = self.request.GET['school']
+            school = School.objects.get(id=school_id)
+        except:
+            raise Http404
+
         school_name = school.name
         context['school_name'] = school_name
         context['school_id'] = school_id 
@@ -197,7 +199,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
     
-
 class GroupViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
@@ -217,7 +218,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
         obj.members += self.request.user
 
     def get_queryset(self):
-        return School.objects.filter(members__id=self.request.user.id)
+        return School.objects.filter(members=self.request.user)
 
 class LocationViewSet(viewsets.ModelViewSet):
     """
@@ -227,7 +228,7 @@ class LocationViewSet(viewsets.ModelViewSet):
     permission_classes = (IsMember,)
     serializer_class = LocationSerializer
     def get_queryset(self):
-        return Location.objects.filter(school__members__id=self.request.user.id)
+        return Location.objects.filter(school__members=self.request.user)
 
 class CourseViewSet(viewsets.ModelViewSet):
     """
@@ -237,7 +238,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     permission_classes = (IsMember,)
     serializer_class = CourseSerializer
     def get_queryset(self):
-        return Course.objects.filter(location__school__members__id=self.request.user.id)
+        return Course.objects.filter(location__school__members=self.request.user)
 
 class StudentViewSet(viewsets.ModelViewSet):
     """
@@ -257,4 +258,4 @@ class InstructorViewSet(viewsets.ModelViewSet):
     permission_classes = (IsManager,)
     serializer_class = UserSerializer
     def get_queryset(self):
-        return User.objects.filter(groups__name='Instructors')
+        return User.objects.filter(groups__name='Instructors', school__members=self.request.user)

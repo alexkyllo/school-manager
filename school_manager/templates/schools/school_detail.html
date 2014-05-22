@@ -7,5 +7,5 @@
     </ul>
     <a href="{{ object.get_absolute_url }}update/">Update {{ object.name }}</a>
     <a href="{{ object.get_absolute_url }}delete/">Delete {{ object.name }}</a>
-    <a href="{{ object.get_absolute_url }}locations/">Locations for {{ object.name }}</a>
+    <a href="/locations/?school={{ object.id }}">Locations for {{ object.name }}</a>
 {% endblock %}
