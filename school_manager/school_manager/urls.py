@@ -27,6 +27,10 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
     url(r'^locations/$', LocationList.as_view(), name='location_list'),
+    url(r'^locations/(?P<pk>\d+)/$', LocationDetail.as_view(), name='location_detail'),
+    url(r'^locations/create/$', LocationCreate.as_view(), name='location_create'),
+    url(r'^locations/(?P<pk>\d+)/update/$', LocationUpdate.as_view(), name='location_update'),
+    url(r'^locations/(?P<pk>\d+)/delete/$', LocationDelete.as_view(), name='location_delete'),
 )
 
 #URL patterns for Location resources nested under schools
@@ -37,26 +41,26 @@ urlpatterns += (
     #    view = LocationList.as_view(),
     #    name = 'school_location_list',
     #),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
-        view =  LocationDetail.as_view(),
-        name = 'school_location_detail',
-    ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
-        view =  LocationCreate.as_view(),
-        name = 'school_location_create',
-    ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
-        view =  LocationDelete.as_view(),
-        name = 'school_location_delete',
-        ),
-    url (
-        regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
-        view =  LocationUpdate.as_view(),
-        name = 'school_location_update',
-        )
+    #url (
+    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/$',
+    #    view =  LocationDetail.as_view(),
+    #    name = 'school_location_detail',
+    #),
+    #url (
+    #    regex = r'^schools/(?P<school_id>\d+)/locations/create/$',
+    #    view =  LocationCreate.as_view(),
+    #    name = 'school_location_create',
+    #),
+    #url (
+    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/delete/$',
+    #    view =  LocationDelete.as_view(),
+    #    name = 'school_location_delete',
+    #    ),
+    #url (
+    #    regex = r'^schools/(?P<school_id>\d+)/locations/(?P<pk>\d+)/update/$',
+    #    view =  LocationUpdate.as_view(),
+    #    name = 'school_location_update',
+    #    )
     )
 
 #URL patterns for Course resources nested under locations
