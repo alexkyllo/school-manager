@@ -13,11 +13,12 @@ from django import forms
 from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
 from django.http import Http404
+
 
 # This is the base school app view and should provide access
 # to school information
@@ -52,7 +53,9 @@ class SchoolCreate(SchoolMixin, CreateView):
         return super(SchoolCreate, self).form_valid(form)
 
 class SchoolDelete(SchoolMixin, DeleteView):
-    pass
+    @method_decorator(permission_required('schools.can_delete', raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(SchoolDelete, self).dispatch(*args, **kwargs)
 
 class SchoolUpdate(SchoolMixin, UpdateView):
     form_class = SchoolForm

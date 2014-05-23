@@ -139,20 +139,36 @@ class TestSchoolViewsWithFixtures(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def testUserCanViewOwnSchoolsList(self):
+    def test_user_can_view_own_schools_list(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/')
         self.assertContains(response, "A Cool School", status_code=200)
 
-    def testUserCannotViewOtherSchoolsList(self):
+    def test_user_cannot_view_other_schools_list(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/')
         self.assertNotContains(response, "A Cooler School")
 
-    def testAnonymousUserCannotViewSchoolsList(self):
+    def test_anon_user_cannot_view_schools_list(self):
         anon_client = Client()
         response = anon_client.get('/schools/')
         self.assertRedirects(response, '/accounts/login/?next=/schools/')
+
+    def test_manager_can_delete_own_school(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.post('/schools/1/delete/', follow=True)
+        self.assertRedirects(response, '/schools/', target_status_code=200)
+        self.assertNotContains(response, "A Cool School", status_code=200)
+
+    def test_student_cannot_delete_school(self):
+        self.client.login(username='ruby', password='ruby')
+        response = self.client.post('/schools/1/delete/')
+        self.assertEqual(response.status_code, 403)
+
+    def test_manager_cannot_delete_other_school(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.post('/schools/2/delete/')
+        self.assertEqual(response.status_code, 404)
 
 class TestLocationViews(TestCase):
     fixtures = ['schools.json', 'users.json', 'groups.json', 'locations.json']
