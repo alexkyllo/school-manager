@@ -29,16 +29,16 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
 
     #Location resources
-    url(r'^locations/$', LocationList.as_view(), name='location_list'),
+    url(r'^schools/(?P<school_id>\d+)/locations/$', LocationList.as_view(), name='location_list'),
     url(r'^locations/(?P<pk>\d+)/$', LocationDetail.as_view(), name='location_detail'),
     url(r'^locations/create/$', LocationCreate.as_view(), name='location_create'),
     url(r'^locations/(?P<pk>\d+)/update/$', LocationUpdate.as_view(), name='location_update'),
     url(r'^locations/(?P<pk>\d+)/delete/$', LocationDelete.as_view(), name='location_delete'),
 
     #Course resources
-    url(r'^courses/$', CourseList.as_view(), name='course_list'),
+    url(r'^locations/(?P<location_id>\d+)/courses/$', CourseList.as_view(), name='course_list'),
     url(r'^courses/(?P<pk>\d+)/$', CourseDetail.as_view(), name='course_detail'),
-    url(r'^courses/create/$', CourseCreate.as_view(), name='course_create'),
+    url(r'^locations/(?P<location_id>\d+)/courses/create/$', CourseCreate.as_view(), name='course_create'),
     url(r'^courses/(?P<pk>\d+)/update/$', CourseUpdate.as_view(), name='course_update'),
     url(r'^courses/(?P<pk>\d+)/delete/$', CourseDelete.as_view(), name='course_delete'),
 )

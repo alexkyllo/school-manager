@@ -16,10 +16,13 @@ class IsManager(permissions.BasePermission):
 
         # Instance must have an attribute named `manager`.
         #managers = Group.objects.get(name='Managers')
-        #return request.user.groups == managers
+        #return request.user in managers.users
         return True
 
 class IsMember(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         user_schools = School.objects.filter(members__id=request.user.id)
-        return obj.school in user_schools
+        if isinstance(obj, School):
+            return obj in user_schools
+        else:
+            return obj.school in user_schools
