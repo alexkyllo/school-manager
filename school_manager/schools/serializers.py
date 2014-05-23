@@ -30,4 +30,4 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Course
-        fields = ('url', 'location', 'name', 'instructors', 'students')
+        fields = ('url', 'location', 'name',)

@@ -70,7 +70,7 @@ class LocationMixin(LoginRequiredMixin, object):
 #        return Location.objects.filter(school__members=self.request.user)
 
     def form_valid(self, form):
-        form.instance.school_id = self.kwargs['school']
+        form.instance.school_id = self.kwargs['school_id']
         membership = get_object_or_404(School, id=form.instance.school_id, members=self.request.user)
 
         return super(LocationMixin, self).form_valid(form)

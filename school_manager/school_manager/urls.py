@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     #Location resources
     url(r'^schools/(?P<school_id>\d+)/locations/$', LocationList.as_view(), name='location_list'),
     url(r'^locations/(?P<pk>\d+)/$', LocationDetail.as_view(), name='location_detail'),
-    url(r'^locations/create/$', LocationCreate.as_view(), name='location_create'),
+    url(r'^schools/(?P<school_id>\d+)/locations/create/$', LocationCreate.as_view(), name='location_create'),
     url(r'^locations/(?P<pk>\d+)/update/$', LocationUpdate.as_view(), name='location_update'),
     url(r'^locations/(?P<pk>\d+)/delete/$', LocationDelete.as_view(), name='location_delete'),
 
