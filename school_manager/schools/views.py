@@ -76,11 +76,10 @@ class LocationMixin(LoginRequiredMixin, object):
         return super(LocationMixin, self).form_valid(form)
 
 class LocationList(LocationMixin, ListView):
-    #pass
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(LocationList, self).get_context_data(**kwargs)
-        school = get_object_or_404(School, id=self.kwargs['school_id'])
+        school = get_object_or_404(School, id=self.kwargs['school_id'], members=self.request.user)
         context['school_name'] = school.name
         context['school_id'] = school.id 
         return context

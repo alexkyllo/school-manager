@@ -1,0 +1,47 @@
+[
+{
+    "fields": {
+        "name": "Students",
+        "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Instructors",
+        "permissions": [
+            32,
+            34,
+            35,
+            36
+        ]
+    },
+    "model": "auth.group",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "Managers",
+        "permissions": [
+            31,
+            32,
+            33,
+            28,
+            29,
+            30,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            34,
+            35,
+            36
+        ]
+    },
+    "model": "auth.group",
+    "pk": 3
+}
+]

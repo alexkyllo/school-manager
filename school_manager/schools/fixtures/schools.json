@@ -1,0 +1,24 @@
+[
+{
+    "fields": {
+        "name": "A Cool School",
+        "members": [
+            1,
+            2
+        ]
+    },
+    "model": "schools.school",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "A Cooler School",
+        "members": [
+            3,
+            4
+        ]
+    },
+    "model": "schools.school",
+    "pk": 2
+}
+]

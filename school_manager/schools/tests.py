@@ -117,10 +117,6 @@ class TestSchoolViews(TestCase):
         response = SchoolList.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-
-class TestLocationViews(TestCase):
-    pass
-
 class TestAccounts(TestCase):
     def setUp(self):
         self.client = Client()
@@ -138,4 +134,49 @@ class TestAccounts(TestCase):
         user = User.objects.get(username='testuser1')
         self.assertTrue(user)
 
+class TestSchoolViewsWithFixtures(TestCase):
+    fixtures = ['schools.json', 'users.json', 'groups.json']
 
+    def setUp(self):
+        self.client = Client()
+
+    def testUserCanViewOwnSchoolsList(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/')
+        self.assertContains(response, "A Cool School", status_code=200)
+
+    def testUserCannotViewOtherSchoolsList(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/')
+        self.assertNotContains(response, "A Cooler School")
+
+    def testAnonymousUserCannotViewSchoolsList(self):
+        anon_client = Client()
+        response = anon_client.get('/schools/')
+        self.assertRedirects(response, '/accounts/login/?next=/schools/')
+
+class TestLocationViews(TestCase):
+    fixtures = ['schools.json', 'users.json', 'groups.json', 'locations.json']
+
+    def setUp(self):
+        self.client = Client()
+
+    def testUserCanViewLocationsOfOwnSchool(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/1/locations/')
+        self.assertContains(response, "A Cool School Kirkland Location", status_code=200)
+
+    def testUserCannotViewLocationsOfOtherSchools(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/2/locations/')
+        self.assertEqual(response.status_code, 404)
+
+    def testUserCanViewLocationDetailOfOwnSchool(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/locations/1/')
+        self.assertContains(response, "A Cool School Kirkland Location", status_code=200)
+
+    def testUserCannotViewLocationDetailOfOtherSchool(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/locations/2/')
+        self.assertEqual(response.status_code, 404)
