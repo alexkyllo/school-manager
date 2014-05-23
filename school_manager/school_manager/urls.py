@@ -45,7 +45,7 @@ urlpatterns = patterns('',
 
 #URL routes for API
 from rest_framework import routers
-from schools.views import (
+from api.views import (
     SchoolViewSet, LocationViewSet, UserViewSet, StudentViewSet, InstructorViewSet, GroupViewSet, CourseViewSet,
     )
 from django.conf.urls import patterns, url, include
