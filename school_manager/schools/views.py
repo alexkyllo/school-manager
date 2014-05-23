@@ -61,13 +61,9 @@ class SchoolUpdate(SchoolMixin, UpdateView):
 class LocationMixin(LoginRequiredMixin, object):
     model = Location
 
-    #def get_success_url(self):
-    #    school_id = self.kwargs.get('school_id'),
-    #    return reverse('school_location_list', kwargs={'school_id': school_id[0]})
-
-#    def get_queryset(self):
+    def get_queryset(self):
         #Filter the query set so that it only returns locations for schools that are managed by the currently logged-in user
-#        return Location.objects.filter(school__members=self.request.user)
+        return Location.objects.filter(school__members=self.request.user)
 
     def form_valid(self, form):
         form.instance.school_id = self.kwargs['school_id']
