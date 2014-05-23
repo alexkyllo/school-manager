@@ -109,8 +109,8 @@ class CourseMixin(LoginRequiredMixin, object):
     #            'location_id' : location_id[0],
     #        })
 
-#    def get_queryset(self):
-#        return Course.objects.filter(location__school__members=self.request.user)
+    def get_queryset(self):
+        return Course.objects.filter(location__school__members=self.request.user)
 
     def form_valid(self, form):
         form.instance.location_id = self.kwargs['location_id']
@@ -124,7 +124,7 @@ class CourseList(CourseMixin, ListView):
         # Call the base implementation first to get a context
 
         context = super(CourseList, self).get_context_data(**kwargs)
-        location = get_object_or_404(Location,id=self.kwargs['location_id'])
+        location = get_object_or_404(Location,id=self.kwargs['location_id'], school__members=self.request.user)
 
         context['location_id'] = location.id
         context['location_name'] = location.name

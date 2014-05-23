@@ -11,7 +11,6 @@ class TestModelRelations(TestCase):
         students_group = Group.objects.create(name="Students")
         instructors_group = Group.objects.create(name="Instructors")
 
-
         school_manager_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo",)
         school_manager_user.groups.add(managers_group)
         cool_school = School.objects.create(name="A Cool School")
@@ -161,22 +160,79 @@ class TestLocationViews(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def testUserCanViewLocationsOfOwnSchool(self):
+    def test_user_can_view_location_list_of_own_school(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/1/locations/')
         self.assertContains(response, "A Cool School Kirkland Location", status_code=200)
 
-    def testUserCannotViewLocationsOfOtherSchools(self):
+    def test_user_cannot_view_location_list_of_other_school(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/2/locations/')
         self.assertEqual(response.status_code, 404)
 
-    def testUserCanViewLocationDetailOfOwnSchool(self):
+    def test_user_can_view_location_detail_of_own_school(self):
         self.client.login(username='kyllo',password='password')
         response = self.client.get('/locations/1/')
         self.assertContains(response, "A Cool School Kirkland Location", status_code=200)
 
-    def testUserCannotViewLocationDetailOfOtherSchool(self):
+    def test_user_cannot_view_location_detail_of_other_school(self):
         self.client.login(username='kyllo',password='password')
         response = self.client.get('/locations/2/')
         self.assertEqual(response.status_code, 404)
+
+    def test_user_cannot_create_location_for_other_school(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.post('/schools/2/locations/create/', 
+            {
+                'school_id': 2, 
+                'name':'a school', 
+                'address_1': 'a', 
+                'address_2': 'a', 
+                'city': 'a', 
+                'state_province': 'WA',
+                'zip_postal_code': '12345',
+                'country': 'US',
+            })
+        self.assertEqual(response.status_code, 404)
+
+    def test_anonymous_user_cannot_view_location_list(self):
+        anon_client = Client()
+        response = anon_client.get('/schools/1/locations/')
+        self.assertRedirects(response, '/accounts/login/?next=/schools/1/locations/')
+
+    def test_anonymous_user_cannot_view_location_detail(self):
+        anon_client = Client()
+        response = anon_client.get('/locations/1/')
+        self.assertRedirects(response, '/accounts/login/?next=/locations/1/')
+
+class TestCourseViews(TestCase):
+    fixtures = ['schools.json', 'locations.json', 'courses.json', 'users.json', 'groups.json']
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_user_can_view_course_list_of_own_school(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/locations/1/courses/')
+        self.assertContains(response, "Yoga 101", status_code=200)  
+
+    def test_user_cannot_view_course_list_of_other_school(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/locations/2/courses/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_user_can_view_course_detail_of_own_school(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/courses/1/')
+        self.assertContains(response, "Yoga 101", status_code=200)  
+
+    def test_user_cannot_view_course_detail_of_other_school(self):
+        self.client.login(username='kyllo',password='password')
+        response = self.client.get('/courses/2/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_anonymous_user_cannot_view_course_list(self):
+        anon_client = Client()
+        response = anon_client.get('/locations/1/courses/')
+        self.assertRedirects(response, '/accounts/login/?next=/locations/1/courses/')
+
