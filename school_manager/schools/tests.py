@@ -133,6 +133,30 @@ class TestAccounts(TestCase):
         user = User.objects.get(username='testuser1')
         self.assertTrue(user)
 
+class TestStudentViews(TestCase):
+    fixtures = ['users.json', 'groups.json', 'schools.json']
+    def setUp(self):
+        self.client = Client()
+
+    def test_managers_can_view_school_students_list(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/1/students/')
+        self.assertContains(response, 'ruby', status_code=200)
+
+    def test_managers_can_view_school_students_detail(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/students/2/')
+        self.assertContains(response, 'ruby', status_code=200)
+
+
+#class TestInstructorViews(TestCase):
+#    fixtures = ['users.json, groups.json, schools.json']
+#    def setUp(self):
+#        self.client = Client()
+
+#    def test_managers_can_create_instructors(self):
+#        self.client.post('/schools/1/students/create/')
+
 class TestSchoolViewsWithFixtures(TestCase):
     fixtures = ['schools.json', 'users.json', 'groups.json']
 
@@ -148,6 +172,16 @@ class TestSchoolViewsWithFixtures(TestCase):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/')
         self.assertNotContains(response, "A Cooler School")
+
+    def test_user_can_view_own_school_detail(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/1/')
+        self.assertContains(response, "A Cool School", status_code=200)        
+
+    def test_user_cannot_view_other_schools_detail(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/2/')
+        self.assertEqual(response.status_code, 404)
 
     def test_anon_user_cannot_view_schools_list(self):
         anon_client = Client()

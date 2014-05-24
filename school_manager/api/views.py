@@ -16,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (IsManager,)
 
     def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
+        return User.objects.filter(groups__name='Students', school__members=self.request.user)
     
 class GroupViewSet(viewsets.ModelViewSet):
     """

@@ -148,6 +148,38 @@ class CourseUpdate(CourseMixin, UpdateView):
 class CourseDetail(CourseMixin, DetailView):
     pass
 
+#Student CBVs
+class StudentMixin(LoginRequiredMixin, object):
+    model = User
+
+    def get_queryset(self):
+        return User.objects.filter(groups__name='Students', school__members=self.request.user)
+
+class StudentList(StudentMixin, ListView):
+    template_name = 'schools/student_list.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+
+        context = super(StudentList, self).get_context_data(**kwargs)
+        school = get_object_or_404(School,id=self.kwargs['school_id'], members=self.request.user)
+
+        context['school_id'] = school.id
+        context['school_name'] = school.name
+        return context
+
+class StudentDetail(StudentMixin, DetailView):
+    template_name = 'schools/student_detail.html'
+
+class StudentCreate(StudentMixin, CreateView):
+    pass
+
+class StudentUpdate(StudentMixin, UpdateView):
+    pass
+
+class StudentDelete(StudentMixin, DeleteView):
+    pass
+
 #Function Based Views for homepage and register page
 
 def home(request):
