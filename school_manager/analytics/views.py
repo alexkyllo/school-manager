@@ -17,12 +17,17 @@ def analytics_home(request):
     context = {'test_list': test_list}
     return render(request, 'analytics/index.html', context)
 
+def model_names(request):
+    """ Accepts a model name and returns the fields
+    """
+    model_names = School._meta.get_all_field_names()
+    context = model_names
+    return render(request, 'analytics/index.html', context)
 
 def simple_chart(request):
     """The first try at creating analytics"""
     import random
     import django
-    from schools.models import School
     import numpy as np
     import pandas as pd
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
