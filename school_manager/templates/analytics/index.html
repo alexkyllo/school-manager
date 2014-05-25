@@ -1,16 +1,34 @@
 {% extends "base.html" %}
-
-{%block title %}
+{% load staticfiles %}
+{% block title %}
 Welcome to School Manager Global Analytics Page!
 {% endblock %}
-
+{% block app_imports %}
+<script src="{% static "js/analytics.js" %}"></script>
+{% endblock %}
 {% block content %}
 {% if user.is_authenticated %}
-  <p>Welcome to School Manager Global Analytics Page {{ user.username }}. Thanks for logging in.</p>
-  <p><a href="/schools">My Schools</a></p>
-  <p><a href="/schools/create">Add a School</a></p>
-  <p><img src="/analytics/chart" /></p>
+<p>Welcome to School Manager Global Analytics Page {{ user.username }}. Thanks for logging in.</p>
+
+<div class="btn-group">
+  <a href="/schools"><button type="button" class="btn btn-default">My Schools</button></a>
+  <a href="/schools/create"><button type="button" class="btn btn-default">Add a School</button></a>
+  <a href="/analytics"><button type="button" class="btn btn-default">Analytics</button></a>
+  <a href="/api"><button type="button" class="btn btn-default">API</button></a>
+</div>
+
+<!-- Button group -->
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+  Dimensions <span class="caret"></span>
+  </button>
+  <ul id="dim_list"class="dropdown-menu" role="menu">
+    <!-- <li><a href="#">Action</a></li> -->
+  </ul>
+</div>
+<!-- Button group -->
+<p><img src="/analytics/chart" /></p>
 {% else %}
-  <p>Welcome, new user. Please <a href="/accounts/login/">log in</a> or <a href="/accounts/register">create</a>  and account</p>
+<p>Welcome, new user. Please <a href="/accounts/login/">log in</a> or <a href="/accounts/register">create</a>  and account</p>
 {% endif %}
 {% endblock %}
