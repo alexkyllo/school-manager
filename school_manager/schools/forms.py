@@ -1,6 +1,6 @@
 from django import forms
 from schools.models import School, Location, Course 
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 
 class SchoolForm(forms.ModelForm):
@@ -29,21 +29,12 @@ class ManagerCreationForm(UserCreationForm):
         return user
 
 class StudentCreationForm(UserCreationForm):
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        students = Group.objects.get(name='Students')
-        if commit:
-            user.save()
-            user.groups.add(students)
-        return user
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email", "username")
+
 
 class InstructorCreationForm(UserCreationForm):
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        instructors = Group.objects.get(name='Instructors')
-        if commit:
-            user.save()
-            user.groups.add(instructors)
-        return user
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email", "username")

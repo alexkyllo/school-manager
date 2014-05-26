@@ -7,5 +7,5 @@
             <li><a href="{{ school.get_absolute_url }}/{{ location.get_absolute_url }}">{{ location.name }}</a></li>
         {% endfor %}
     </ul>
-    <p><a href="{{ school.get_absolute_url }}/locations/create">Add a Location for {{ school.name }}</a></p>
+    <p><a href="locations/create">Add a Location for {{ school.name }}</a></p>
 {% endblock %}

@@ -4,7 +4,7 @@
     <h2>Students Enrolled at {{ school_name }}</h2>
     <ul>
         {% for student in object_list %}
-            <li><a href="{{ student.get_absolute_url }}" >{{ student.name }}</a></li>
+            <li><a href="/students/{{ student.username }}" >{{ student.get_full_name }}</a></li>
         {% endfor %}
     </ul>
     <p><a href="create">Add a Student</a></p>
