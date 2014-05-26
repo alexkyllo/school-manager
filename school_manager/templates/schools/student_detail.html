@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Student Detail for {{ object.first_name }} {{ object.last_name }}</h2>
+    <h2>Student Detail for {{ object.get_full_name }}</h2>
     <ul>
-        <li>Name: {{ object.name }}</li>
+        <li>First Name: {{ object.first_name }}</li>
+        <li>Last Name: {{ object.last_name }}</li>
+        <li>E-Mail: {{ object.email }}</li>
     </ul>
-    <a href="{{ object.get_absolute_url }}update/">Update {{ object.first_name }} {{ object.last_name }}</a>
-    <a href="{{ object.get_absolute_url }}delete/">Delete {{ object.first_name }} {{ object.last_name }}</a>
+    <a href="update/">Update {{ object.get_full_name }}</a>
+    <a href="delete/">Delete {{ object.get_full_name }}</a>
 {% endblock %}

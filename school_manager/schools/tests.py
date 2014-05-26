@@ -141,13 +141,24 @@ class TestStudentViews(TestCase):
     def test_managers_can_view_school_students_list(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/schools/1/students/')
-        self.assertContains(response, 'ruby', status_code=200)
+        self.assertContains(response, 'Ruby Dog', status_code=200)
 
     def test_managers_can_view_school_students_detail(self):
         self.client.login(username='kyllo', password='password')
         response = self.client.get('/students/2/')
-        self.assertContains(response, 'ruby', status_code=200)
+        self.assertContains(response, 'Ruby Dog', status_code=200)
 
+    def test_managers_can_create_students(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.post('/school/1/students/create/', 
+            {
+                'username':'newstudent', 
+                'email':'newstudent@newstudent.com',
+                'first_name':'New',
+                'last_name':'Student'
+            }, 
+            follow=True)
+        self.assertContains(response,"New Student", status_code=200)
 
 #class TestInstructorViews(TestCase):
 #    fixtures = ['users.json, groups.json, schools.json']

@@ -45,6 +45,7 @@ urlpatterns = patterns('',
 
     #User Resources
     url(r'^schools/(?P<school_id>\d+)/students/$', StudentList.as_view(), name='student_list'),
+    url(r'^schools/(?P<school_id>\d+)/students/create/$', StudentCreate.as_view(), name='student_create'),
     url(r'^students/(?P<pk>\d+)/$', StudentDetail.as_view(), name='student_view'),
 )
 

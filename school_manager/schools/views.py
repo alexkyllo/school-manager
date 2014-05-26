@@ -4,20 +4,21 @@ This Base view for for the schools app will facilitate the
 creation and management of schools
 """
 
-from django.template import RequestContext, loader
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.models import User, Group
-from schools.models import School, Course, Location
 from django import forms
-from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.utils.decorators import method_decorator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.template import RequestContext, loader
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
+from schools.models import School, Course, Location
 
 
 # This is the base school app view and should provide access
@@ -172,7 +173,8 @@ class StudentDetail(StudentMixin, DetailView):
     template_name = 'schools/student_detail.html'
 
 class StudentCreate(StudentMixin, CreateView):
-    pass
+    template_name = 'schools/student_form.html'
+    form_class = UserCreationForm
 
 class StudentUpdate(StudentMixin, UpdateView):
     pass

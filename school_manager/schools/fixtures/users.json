@@ -23,8 +23,8 @@
 {
     "fields": {
         "password": "pbkdf2_sha256$12000$T3hfxawQT7rz$aFHQmt4PZOfTfeasArpJuh1pfLuYk/leGnxZugJTtU4=",
-        "last_name": "",
-        "first_name": "",
+        "last_name": "Dog",
+        "first_name": "Ruby",
         "date_joined": "2014-05-11T06:06:36Z",
         "is_active": true,
         "user_permissions": [],

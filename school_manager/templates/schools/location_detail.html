@@ -5,7 +5,7 @@
     <ul>
         <li>Name: {{ object.name }}</li>
     </ul>
-    <a href="{{ object.get_absolute_url }}update/">Update {{ object.name }}</a>
-    <a href="{{ object.get_absolute_url }}delete/">Delete {{ object.name }}</a>
-    <a href="{{ object.get_absolute_url }}courses/">Courses for {{ object.name }}</a>
+    <a href="update/">Update {{ object.name }}</a>
+    <a href="delete/">Delete {{ object.name }}</a>
+    <a href="courses/">Courses for {{ object.name }}</a>
 {% endblock %}
