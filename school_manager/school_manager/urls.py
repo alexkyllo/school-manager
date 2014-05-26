@@ -47,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<school_id>\d+)/students/$', StudentList.as_view(), name='student_list'),
     url(r'^schools/(?P<school_id>\d+)/students/create/$', StudentCreate.as_view(), name='student_create'),
     url(r'^students/(?P<username>\w+)/$', StudentDetail.as_view(), name='student_view'),
+    url(r'^students/(?P<username>\w+)/update/$', StudentUpdate.as_view(), name='student_update'),
 )
 
 #URL routes for API

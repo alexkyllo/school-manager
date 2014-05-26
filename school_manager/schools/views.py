@@ -197,7 +197,10 @@ class StudentCreate(StudentMixin, CreateView):
         return super(StudentCreate, self).form_valid(form)
 
 class StudentUpdate(StudentMixin, UpdateView):
-    pass
+    template_name = 'schools/student_form.html'
+    form_class = StudentCreationForm
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])
 
 class StudentDelete(StudentMixin, DeleteView):
     pass
