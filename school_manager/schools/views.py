@@ -17,7 +17,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm
+from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm, StudentCreationForm, InstructorCreationForm
 from schools.models import School, Course, Location
 
 
@@ -156,6 +156,14 @@ class StudentMixin(LoginRequiredMixin, object):
     def get_queryset(self):
         return User.objects.filter(groups__name='Students', school__members=self.request.user)
 
+    def get_success_url(self):
+        username = self.request.POST['username'],
+        return reverse(
+            'student_view', 
+            kwargs={
+                'username' : username[0], 
+            })
+
 class StudentList(StudentMixin, ListView):
     template_name = 'schools/student_list.html'
 
@@ -172,9 +180,21 @@ class StudentList(StudentMixin, ListView):
 class StudentDetail(StudentMixin, DetailView):
     template_name = 'schools/student_detail.html'
 
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])
+
 class StudentCreate(StudentMixin, CreateView):
     template_name = 'schools/student_form.html'
-    form_class = UserCreationForm
+    form_class = StudentCreationForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        school = get_object_or_404(School,id=self.kwargs['school_id'], members=self.request.user)
+        school.members.add(self.object)
+        students = Group.objects.get(name="Students")
+        self.object.groups.add(students)
+        return super(StudentCreate, self).form_valid(form)
 
 class StudentUpdate(StudentMixin, UpdateView):
     pass
