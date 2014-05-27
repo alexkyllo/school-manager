@@ -2,8 +2,8 @@
 {
     "fields": {
         "password": "pbkdf2_sha256$12000$h9HQvYvF9Yzc$nL2Yb3C8b3DuOhbrhH8/wgoq+Oqe4AGKcLrxgFztkQ8=",
-        "last_name": "",
-        "first_name": "",
+        "last_name": "Kyllo",
+        "first_name": "Alex",
         "date_joined": "2014-05-10T16:10:57Z",
         "is_active": true,
         "user_permissions": [],

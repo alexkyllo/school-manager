@@ -205,6 +205,64 @@ class StudentUpdate(StudentMixin, UpdateView):
 class StudentDelete(StudentMixin, DeleteView):
     pass
 
+#Instructor CBVs
+class InstructorMixin(LoginRequiredMixin, object):
+    model = User
+
+    def get_queryset(self):
+        return User.objects.filter(groups__name='Instructors', school__members=self.request.user)
+
+    def get_success_url(self):
+        username = self.request.POST['username'],
+        return reverse(
+            'instructor_view', 
+            kwargs={
+                'username' : username[0], 
+            })
+
+class InstructorList(InstructorMixin, ListView):
+    template_name = 'schools/student_list.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+
+        context = super(InstructorList, self).get_context_data(**kwargs)
+        school = get_object_or_404(School,id=self.kwargs['school_id'], members=self.request.user)
+
+        context['school_id'] = school.id
+        context['school_name'] = school.name
+        return context
+
+class InstructorDetail(InstructorMixin, DetailView):
+    template_name = 'schools/student_detail.html'
+
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])
+
+class InstructorCreate(InstructorMixin, CreateView):
+    template_name = 'schools/student_form.html'
+    form_class = InstructorCreationForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        school = get_object_or_404(School,id=self.kwargs['school_id'], members=self.request.user)
+        school.members.add(self.object)
+        students = Group.objects.get(name="Instructors")
+        self.object.groups.add(students)
+        return super(InstructorCreate, self).form_valid(form)
+
+class InstructorUpdate(InstructorMixin, UpdateView):
+    template_name = 'schools/student_form.html'
+    form_class = InstructorCreationForm
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])
+
+class InstructorDelete(InstructorMixin, DeleteView):
+    pass
+
+#User CBVs
+
 #Function Based Views for homepage and register page
 
 def home(request):

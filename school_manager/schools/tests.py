@@ -162,13 +162,34 @@ class TestStudentViews(TestCase):
             follow=True)
         self.assertContains(response,"New Student", status_code=200)
 
-#class TestInstructorViews(TestCase):
-#    fixtures = ['users.json, groups.json, schools.json']
-#    def setUp(self):
-#        self.client = Client()
+class TestInstructorViews(TestCase):
+    fixtures = ['users.json', 'groups.json', 'schools.json',]
+    def setUp(self):
+        self.client = Client()
 
-#    def test_managers_can_create_instructors(self):
-#        self.client.post('/schools/1/students/create/')
+    def test_managers_can_create_instructors(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.post('/schools/1/instructors/create/', 
+            {
+                'username':'newinstructor', 
+                'email':'new@instructor.com',
+                'first_name':'New',
+                'last_name':'Instructor',
+                'password1':'newinstructor',
+                'password2':'newinstructor',
+            }, 
+            follow=True)
+        self.assertContains(response,"New Instructor", status_code=200)
+
+    def test_managers_can_view_school_instructors_list(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/1/instructors/')
+        self.assertContains(response, 'Alex Kyllo', status_code=200)
+
+    def test_managers_can_view_school_students_detail(self):
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/instructors/kyllo/')
+        self.assertContains(response, 'Alex Kyllo', status_code=200)
 
 class TestSchoolViewsWithFixtures(TestCase):
     fixtures = ['schools.json', 'users.json', 'groups.json']
