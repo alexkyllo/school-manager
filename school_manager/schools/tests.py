@@ -162,6 +162,20 @@ class TestStudentViews(TestCase):
             follow=True)
         self.assertContains(response,"New Student", status_code=200)
 
+    def test_students_cannot_create_students(self):
+        self.client.login(username='ruby', password='ruby')
+        response = self.client.post('/schools/1/students/create/', 
+            {
+                'username':'newstudent2', 
+                'email':'newstudent@newstudent.com',
+                'first_name':'New',
+                'last_name':'Student2',
+                'password1':'newstudent2',
+                'password2':'newstudent2',
+            }, 
+            follow=True)
+        self.assertEqual(response.status_code, 403)
+
 class TestInstructorViews(TestCase):
     fixtures = ['users.json', 'groups.json', 'schools.json',]
     def setUp(self):

@@ -1,6 +1,6 @@
 # CBVs for API Viewsets
 from rest_framework import viewsets, permissions
-from api.permissions import IsManager, IsMember
+from api.permissions import IsManager, IsMember, IsManagerOrInstructor
 from api.serializers import (
     UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer,
 )
@@ -64,7 +64,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     API endpoint that allows Users in the Students group to be viewed or edited.
     """
     model = User
-    permission_classes = (IsManager, IsMember,)
+    permission_classes = (IsManagerOrInstructor, IsMember,)
     serializer_class = UserSerializer
     def get_queryset(self):
         return User.objects.filter(groups__name='Students', school__members=self.request.user)
@@ -74,7 +74,7 @@ class InstructorViewSet(viewsets.ModelViewSet):
     API endpoint that allows Users in the Students group to be viewed or edited.
     """
     model = User
-    permission_classes = (IsManager,)
+    permission_classes = (IsMember,)
     serializer_class = UserSerializer
     def get_queryset(self):
         return User.objects.filter(groups__name='Instructors', school__members=self.request.user)

@@ -174,6 +174,10 @@ class StudentCreate(CreateView):
     template_name = 'schools/user_form.html'
     form_class = StudentCreationForm
 
+    @method_decorator(permission_required('users.can_create', raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(StudentCreate, self).dispatch(*args, **kwargs)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.save()
@@ -212,6 +216,10 @@ class InstructorList(ListView):
 class InstructorCreate(CreateView):
     template_name = 'schools/user_form.html'
     form_class = InstructorCreationForm
+
+    @method_decorator(permission_required('users.can_create', raise_exception=True))
+    def dispatch(self, *args, **kwargs):
+        return super(InstructorCreate, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
