@@ -3,8 +3,9 @@ from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
     CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
-    StudentCreate, StudentList, StudentUpdate, StudentDelete, StudentDetail,
-    InstructorCreate, InstructorList, InstructorUpdate, InstructorDelete, InstructorDetail,
+    StudentCreate, StudentList,
+    InstructorCreate, InstructorList,
+    UserDetail, UserUpdate,
     register, home
 )
 from django.contrib import admin
@@ -47,12 +48,10 @@ urlpatterns = patterns('',
     #User Resources
     url(r'^schools/(?P<school_id>\d+)/students/$', StudentList.as_view(), name='student_list'),
     url(r'^schools/(?P<school_id>\d+)/students/create/$', StudentCreate.as_view(), name='student_create'),
-    url(r'^students/(?P<username>\w+)/$', StudentDetail.as_view(), name='student_view'),
-    url(r'^students/(?P<username>\w+)/update/$', StudentUpdate.as_view(), name='student_update'),
     url(r'^schools/(?P<school_id>\d+)/instructors/$', InstructorList.as_view(), name='instructor_list'),
     url(r'^schools/(?P<school_id>\d+)/instructors/create/$', InstructorCreate.as_view(), name='instructor_create'),
-    url(r'^instructors/(?P<username>\w+)/$', InstructorDetail.as_view(), name='instructor_view'),
-    url(r'^instructors/(?P<username>\w+)/update/$', InstructorUpdate.as_view(), name='instructor_update'),
+    url(r'^users/(?P<username>\w+)/$', UserDetail.as_view(), name='user_view'),
+    url(r'^users/(?P<username>\w+)/update/$', UserUpdate.as_view(), name='user_update'),
 )
 
 #URL routes for API

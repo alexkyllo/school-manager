@@ -145,7 +145,7 @@ class TestStudentViews(TestCase):
 
     def test_managers_can_view_school_students_detail(self):
         self.client.login(username='kyllo', password='password')
-        response = self.client.get('/students/ruby/')
+        response = self.client.get('/users/ruby/')
         self.assertContains(response, 'Ruby Dog', status_code=200)
 
     def test_managers_can_create_students(self):
@@ -188,7 +188,7 @@ class TestInstructorViews(TestCase):
 
     def test_managers_can_view_school_students_detail(self):
         self.client.login(username='kyllo', password='password')
-        response = self.client.get('/instructors/kyllo/')
+        response = self.client.get('/users/kyllo/')
         self.assertContains(response, 'Alex Kyllo', status_code=200)
 
 class TestSchoolViewsWithFixtures(TestCase):

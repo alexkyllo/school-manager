@@ -38,3 +38,8 @@ class InstructorCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("first_name", "last_name", "email", "username")
+
+class UserUpdateForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "email", "username", "groups")

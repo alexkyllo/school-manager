@@ -37,7 +37,7 @@ def simple_chart(request):
     # Specific Variables
     filtered_data = School.objects.all().values().exclude(name='Jims') #.filter(name='Jims')
     model_names = School._meta.get_all_field_names()
-    ddict = model_to_dict(School.objects.get(pk=1))
+    ddict = model_to_dict(School.objects.get(pk=14))
     ndict = []
     ndict = ddict.keys
     df = pd.DataFrame.from_records(filtered_data)

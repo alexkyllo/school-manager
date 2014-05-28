@@ -17,7 +17,10 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from schools.forms import SchoolForm, CourseForm, LocationForm, ManagerCreationForm, StudentCreationForm, InstructorCreationForm
+from schools.forms import (
+    SchoolForm, CourseForm, LocationForm, 
+    ManagerCreationForm, StudentCreationForm, InstructorCreationForm, UserUpdateForm,
+)
 from schools.models import School, Course, Location
 
 
@@ -150,22 +153,12 @@ class CourseDetail(CourseMixin, DetailView):
     pass
 
 #Student CBVs
-class StudentMixin(LoginRequiredMixin, object):
+class StudentList(ListView):
     model = User
+    template_name = 'schools/student_list.html'
 
     def get_queryset(self):
         return User.objects.filter(groups__name='Students', school__members=self.request.user)
-
-    def get_success_url(self):
-        username = self.request.POST['username'],
-        return reverse(
-            'student_view', 
-            kwargs={
-                'username' : username[0], 
-            })
-
-class StudentList(StudentMixin, ListView):
-    template_name = 'schools/student_list.html'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -177,14 +170,8 @@ class StudentList(StudentMixin, ListView):
         context['school_name'] = school.name
         return context
 
-class StudentDetail(StudentMixin, DetailView):
-    template_name = 'schools/student_detail.html'
-
-    def get_object(self):
-        return get_object_or_404(User, username=self.kwargs['username'])
-
-class StudentCreate(StudentMixin, CreateView):
-    template_name = 'schools/student_form.html'
+class StudentCreate(CreateView):
+    template_name = 'schools/user_form.html'
     form_class = StudentCreationForm
 
     def form_valid(self, form):
@@ -196,32 +183,21 @@ class StudentCreate(StudentMixin, CreateView):
         self.object.groups.add(students)
         return super(StudentCreate, self).form_valid(form)
 
-class StudentUpdate(StudentMixin, UpdateView):
-    template_name = 'schools/student_form.html'
-    form_class = StudentCreationForm
-    def get_object(self):
-        return get_object_or_404(User, username=self.kwargs['username'])
-
-class StudentDelete(StudentMixin, DeleteView):
-    pass
-
-#Instructor CBVs
-class InstructorMixin(LoginRequiredMixin, object):
-    model = User
-
-    def get_queryset(self):
-        return User.objects.filter(groups__name='Instructors', school__members=self.request.user)
-
     def get_success_url(self):
         username = self.request.POST['username'],
         return reverse(
-            'instructor_view', 
+            'user_view', 
             kwargs={
                 'username' : username[0], 
             })
 
-class InstructorList(InstructorMixin, ListView):
-    template_name = 'schools/student_list.html'
+#Instructor CBVs
+class InstructorList(ListView):
+    model = User
+    template_name = 'schools/instructor_list.html'
+
+    def get_queryset(self):
+        return User.objects.filter(groups__name='Instructors', school__members=self.request.user)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -233,14 +209,8 @@ class InstructorList(InstructorMixin, ListView):
         context['school_name'] = school.name
         return context
 
-class InstructorDetail(InstructorMixin, DetailView):
-    template_name = 'schools/student_detail.html'
-
-    def get_object(self):
-        return get_object_or_404(User, username=self.kwargs['username'])
-
-class InstructorCreate(InstructorMixin, CreateView):
-    template_name = 'schools/student_form.html'
+class InstructorCreate(CreateView):
+    template_name = 'schools/user_form.html'
     form_class = InstructorCreationForm
 
     def form_valid(self, form):
@@ -252,16 +222,27 @@ class InstructorCreate(InstructorMixin, CreateView):
         self.object.groups.add(students)
         return super(InstructorCreate, self).form_valid(form)
 
-class InstructorUpdate(InstructorMixin, UpdateView):
-    template_name = 'schools/student_form.html'
-    form_class = InstructorCreationForm
-    def get_object(self):
-        return get_object_or_404(User, username=self.kwargs['username'])
-
-class InstructorDelete(InstructorMixin, DeleteView):
-    pass
+    def get_success_url(self):
+        username = self.request.POST['username'],
+        return reverse(
+            'user_view', 
+            kwargs={
+                'username' : username[0], 
+            })
 
 #User CBVs
+
+class UserDetail(DetailView):
+    template_name = 'schools/user_detail.html'
+
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])    
+
+class UserUpdate(UpdateView):
+    template_name = 'schools/user_form.html'
+    form_class = UserUpdateForm
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])
 
 #Function Based Views for homepage and register page
 
