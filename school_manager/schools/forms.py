@@ -1,7 +1,10 @@
 from django import forms
-from schools.models import School, Location, Course 
+from django.forms.extras.widgets import SelectDateWidget
+from schools.models import School, Location, Course, Session
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
+import datetime
 
 class SchoolForm(forms.ModelForm):
     class Meta:
@@ -17,6 +20,13 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         exclude = ('location','school',)
+
+class SessionForm(forms.ModelForm):
+    class Meta:
+        model = Session
+        startdatetime = forms.DateTimeField(widget=AdminDateWidget, initial=datetime.date.today())
+        enddatetime = forms.SplitDateTimeField()
+        exclude = ('school','course','students')
 
 class ManagerCreationForm(UserCreationForm):
     def save(self, commit=True):

@@ -18,10 +18,10 @@ from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from schools.forms import (
-    SchoolForm, CourseForm, LocationForm, 
+    SchoolForm, CourseForm, LocationForm, SessionForm,
     ManagerCreationForm, StudentCreationForm, InstructorCreationForm, UserUpdateForm,
 )
-from schools.models import School, Course, Location
+from schools.models import School, Course, Location, Session
 
 
 # This is the base school app view and should provide access
@@ -150,6 +150,32 @@ class CourseUpdate(CourseMixin, UpdateView):
     form_class = CourseForm
 
 class CourseDetail(CourseMixin, DetailView):
+    pass
+
+class SessionMixin(object):
+    model = Session
+    form_class = SessionForm
+    def get_queryset(self):
+        #Filter the query set so that it only returns sessions for schools that the currently logged-in user is a member of
+        return Session.objects.filter(school__members=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.course_id = self.kwargs['course_id']
+        course = get_object_or_404(Course, id=form.instance.course_id, school__members=self.request.user)
+        form.instance.school_id = course.school_id
+        
+        return super(CourseMixin, self).form_valid(form)
+
+class SessionCreate(SessionMixin, CreateView):
+    pass
+
+class SessionUpdate(SessionMixin, UpdateView):
+    pass
+
+class SessionDelete(SessionMixin, DeleteView):
+    pass
+
+class SessionDetail(SessionMixin, DetailView):
     pass
 
 #Student CBVs

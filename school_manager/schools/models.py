@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.signals import post_save
+from django.utils.text import slugify
 
 
 class School(models.Model):
     name = models.CharField(max_length=80)
     members = models.ManyToManyField(User)
+    #slug = models.SlugField()
 
     def __str__(self):
         return self.name
@@ -15,11 +17,15 @@ class School(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('school_detail', args=[str(self.id)])
 
+    #def save(self, *args, **kwargs):
+    #    self.slug = slugify(self.name)
+    #    super(School, self).save(*args, **kwargs)
+
 class Location(models.Model):
     school = models.ForeignKey(School, related_name='locations')
     name = models.CharField(max_length=50)
     address_1 = models.CharField(max_length=50)
-    address_2 = models.CharField(max_length=50, null=True)
+    address_2 = models.CharField(max_length=50, blank=True)
     city = models.CharField(max_length=50)
     state_province = models.CharField(max_length=4)
     zip_postal_code = models.CharField(max_length=10)
@@ -54,7 +60,6 @@ class Session(models.Model):
     students = models.ManyToManyField(User)
     startdatetime = models.DateTimeField()
     enddatetime = models.DateTimeField()
-
 
     def __str__(self):
         startdatetime = timezone.localtime(self.startdatetime)

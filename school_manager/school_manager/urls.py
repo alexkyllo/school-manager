@@ -3,6 +3,7 @@ from schools.views import (
     SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
     CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
+    SessionCreate, SessionUpdate, SessionDelete, SessionDetail,
     StudentCreate, StudentList,
     InstructorCreate, InstructorList,
     UserDetail, UserUpdate,
@@ -27,6 +28,7 @@ urlpatterns = patterns('',
     #School resources
     url(r'^schools/$', SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view(), name='school_detail'),
+    #url(r'^schools/(?P<slug>[-\w]+)/$', SchoolDetail.as_view(), name='school_detail_by_slug'),
     url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/'), name='school_create'),
     url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
@@ -44,6 +46,12 @@ urlpatterns = patterns('',
     url(r'^locations/(?P<location_id>\d+)/courses/create/$', CourseCreate.as_view(), name='course_create'),
     url(r'^courses/(?P<pk>\d+)/update/$', CourseUpdate.as_view(), name='course_update'),
     url(r'^courses/(?P<pk>\d+)/delete/$', CourseDelete.as_view(), name='course_delete'),
+
+    #Session Resources
+    url(r'^sessions/(?P<pk>\d+)/$', SessionDetail.as_view(), name='session_detail'),
+    url(r'^courses/(?P<course_id>\d+)/sessions/create/$', SessionCreate.as_view(), name='session_create'),
+    url(r'^sessions/(?P<pk>\d+)/update/$', SessionUpdate.as_view(), name='session_update'),
+    url(r'^sessions/(?P<pk>\d+)/delete/$', SessionDelete.as_view(), name='session_delete'),
 
     #User Resources
     url(r'^schools/(?P<school_id>\d+)/students/$', StudentList.as_view(), name='student_list'),
