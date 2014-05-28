@@ -9,6 +9,6 @@ Delete Location {{location.name}}?
 		{% csrf_token %}
 		<input type="submit" value="Confirm"/>
 	</form>
-	<input type="button" value="Cancel" onclick="history.back(-1)"></button>
+	<input type="button" value="Cancel" class="btn btn-default" onclick="history.back(-1)"></button>
 
 {% endblock %}

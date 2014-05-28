@@ -8,5 +8,5 @@
         <li>E-Mail: {{ object.email }}</li>
         <li>Groups: {% for group in object.groups.all %}{{ group }}</li>{% endfor %}
     </ul>
-    <a href="update/">Update {{ object.get_full_name }}</a>
+    <a href="update/"><button type="button" class="btn btn-default">Update {{ object.get_full_name }}</button></a>
 {% endblock %}
