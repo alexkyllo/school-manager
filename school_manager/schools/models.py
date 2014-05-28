@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 
 class School(models.Model):
@@ -14,7 +15,6 @@ class School(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
         return reverse('school_detail', args=[str(self.id)])
 
     #def save(self, *args, **kwargs):
@@ -35,8 +35,6 @@ class Location(models.Model):
         return self.name    
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-    
         return reverse('location_detail', args=[str(self.id)])
 
 class Course(models.Model):
@@ -50,8 +48,6 @@ class Course(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-    
         return reverse('course_detail', args=[str(self.id)])
 
 class Session(models.Model):
@@ -64,3 +60,6 @@ class Session(models.Model):
     def __str__(self):
         startdatetime = timezone.localtime(self.startdatetime)
         return self.course.name + " on " + startdatetime.strftime("%A, %B %d at %X")
+
+    def get_absolute_url(self):
+        return reverse('session_detail', args=[str(self.id)])

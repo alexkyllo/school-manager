@@ -164,7 +164,7 @@ class SessionMixin(object):
         course = get_object_or_404(Course, id=form.instance.course_id, school__members=self.request.user)
         form.instance.school_id = course.school_id
         
-        return super(CourseMixin, self).form_valid(form)
+        return super(SessionMixin, self).form_valid(form)
 
 class SessionCreate(SessionMixin, CreateView):
     pass
