@@ -21,11 +21,19 @@ class CourseForm(forms.ModelForm):
         model = Course
         exclude = ('location','school',)
 
+class DateTimeWidget(forms.MultiWidget):
+
+    def decompress(self, value):
+        if value:
+            return [value.date(), value.time().replace(microsecond=0)]
+        return [None, None]
+
 class SessionForm(forms.ModelForm):
+    startdatetime = forms.SplitDateTimeField(label="Start Date/Time", widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    enddatetime = forms.SplitDateTimeField(label="End Date/Time", widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
     class Meta:
         model = Session
-        startdatetime = forms.DateTimeField(widget=AdminDateWidget, initial=datetime.date.today())
-        enddatetime = forms.SplitDateTimeField()
+        
         exclude = ('school','course','students')
 
 class ManagerCreationForm(UserCreationForm):
