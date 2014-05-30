@@ -91,7 +91,6 @@ class TestSchoolViews(TestCase):
         request = self.factory.get('/schools/')
         request.user = self.invalid_user
         response = SchoolList.as_view()(request)
-        print(response.context_data)
         self.assertFalse(response.context_data['object_list'])
         #self.assertRedirects(response, '/accounts/login/?next=/schools/', status_code=302, target_status_code=200)
 
