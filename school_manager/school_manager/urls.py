@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from schools.views import (
-    SchoolList, SchoolDetail, SchoolCreate, SchoolUpdate, SchoolDelete, 
+    list_schools, view_school, create_school,
+    SchoolUpdate, SchoolDelete, 
     LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
     CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
     SessionCreate, SessionUpdate, SessionDelete, SessionDetail,
@@ -27,10 +28,10 @@ urlpatterns = patterns('',
     url(r'^students/', include('students.urls')),
 
     #School resources
-    url(r'^schools/$', SchoolList.as_view(), name='school_list'),
-    url(r'^schools/(?P<pk>\d+)/$', SchoolDetail.as_view(), name='school_detail'),
+    url(r'^schools/$', list_schools, name='school_list'),
+    url(r'^schools/(?P<pk>\d+)/$', view_school, name='school_detail'),
     #url(r'^schools/(?P<slug>[-\w]+)/$', SchoolDetail.as_view(), name='school_detail_by_slug'),
-    url(r'^schools/create/$', SchoolCreate.as_view(success_url='/schools/'), name='school_create'),
+    url(r'^schools/create/$', create_school, name='school_create'),
     url(r'^schools/(?P<pk>\d+)/update/$', SchoolUpdate.as_view(success_url='/schools/'), name='school_update'),
     url(r'^schools/(?P<pk>\d+)/delete/$', SchoolDelete.as_view(success_url='/schools/'), name='school_delete'),
 
@@ -49,6 +50,7 @@ urlpatterns = patterns('',
     url(r'^courses/(?P<pk>\d+)/delete/$', CourseDelete.as_view(), name='course_delete'),
 
     #Session Resources
+    #url(r'^courses/(?P<course_id>\d+)/sessions/(?P<pk>\d+)/$', SessionList.as_view(), name='session_list'),
     url(r'^sessions/(?P<pk>\d+)/$', SessionDetail.as_view(), name='session_detail'),
     url(r'^courses/(?P<course_id>\d+)/sessions/create/$', SessionCreate.as_view(), name='session_create'),
     url(r'^sessions/(?P<pk>\d+)/update/$', SessionUpdate.as_view(), name='session_update'),
@@ -72,11 +74,11 @@ from django.conf.urls import patterns, url, include
 from rest_framework import routers
 
 router = routers.DefaultRouter()
+router.register(r'schools', SchoolViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'instructors', InstructorViewSet, base_name='instructors')
 router.register(r'students', StudentViewSet, base_name='students')
 router.register(r'groups', GroupViewSet)
-router.register(r'schools', SchoolViewSet)
 router.register(r'locations', LocationViewSet)
 router.register(r'courses', CourseViewSet)
 

@@ -3,6 +3,7 @@ from schools.models import *
 from django.contrib.auth.models import Group
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
+from unittest import skip
 
 
 class TestModelRelations(TestCase):
@@ -70,35 +71,31 @@ class TestModelRelations(TestCase):
         self.assertEqual(str(cool_school_course_session), "Yoga 101 on Friday, May 09 at 05:35:05")
 
 from django.test.client import RequestFactory, Client
-from schools.views import SchoolList
 
 class TestSchoolViews(TestCase):
+    fixtures = ['users.json', 'groups.json', 'schools.json']
     def setUp(self):
-        self.factory = RequestFactory()
+        #self.factory = RequestFactory()
         self.client = Client()
-        self.valid_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo", password="42")
-        managers_group = Group.objects.create(name="Managers")
-        self.valid_user.groups.add(managers_group)
-        self.invalid_user = User.objects.create_user(username='root', first_name="root", last_name="root")
+        #self.valid_user = User.objects.create_user(username='alex', first_name="Alex", last_name="Kyllo", password="42")
+        #managers_group = Group.objects.create(name="Managers")
+        #self.valid_user.groups.add(managers_group)
+        #self.invalid_user = User.objects.create_user(username='root', first_name="root", last_name="root")
 
     def testValidUserCanViewSchoolsList(self):
-        request = self.factory.get('/schools/')
-        request.user = self.valid_user
-        response = SchoolList.as_view()(request)
+        self.client.login(username='kyllo', password='password')
+        response = self.client.get('/schools/')
         self.assertEqual(response.status_code, 200)
 
     def testInvalidUserCannotViewSchoolsList(self):
-        request = self.factory.get('/schools/')
-        request.user = self.invalid_user
-        response = SchoolList.as_view()(request)
-        self.assertFalse(response.context_data['object_list'])
-        #self.assertRedirects(response, '/accounts/login/?next=/schools/', status_code=302, target_status_code=200)
+        self.client.login(username='root', password='password')
+        response = self.client.get('/schools/')
+        self.assertRedirects(response, '/accounts/login/?next=/schools/', status_code=302, target_status_code=200)
 
     def testValidUserCanCreateSchool(self):
-        self.client.login(username='alex', password='42')
-        self.client.post('/schools/create/', {"name": "Testing School"})
-        testing_school = School.objects.get(name='Testing School')
-        self.assertTrue(testing_school)
+        self.client.login(username='kyllo', password='password')
+        response = self.client.post('/schools/create/', {"name": "Testing School"}, follow=True)
+        self.assertContains(response,"Testing School", status_code=200)
 
     def testInvalidUserCannotCreateSchool(self):
         self.client.login(username='root', password='password')
@@ -110,9 +107,9 @@ class TestSchoolViews(TestCase):
             self.assertTrue(True)
 
     def testValidUserCanViewSchoolDetail(self):
-        request = self.factory.get('/schools/1/')
-        request.user = self.valid_user
-        response = SchoolList.as_view()(request)
+        self.client.login(username='kyllo', password='password')
+        self.client.post('/schools/create/', {'name':'School 1'})
+        response = self.client.get('/schools/1/')
         self.assertEqual(response.status_code, 200)
 
 class TestAccounts(TestCase):

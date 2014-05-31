@@ -13,9 +13,10 @@ from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from schools.forms import (
     SchoolForm, CourseForm, LocationForm, SessionForm,
@@ -41,11 +42,34 @@ class SchoolMixin(LoginRequiredMixin, object):
     def get_queryset(self):
         return School.objects.filter(members=self.request.user)
 
-class SchoolList(SchoolMixin, ListView):
-    pass
+@login_required
+@require_GET
+def list_schools(request):
+    schools = School.objects.filter(members=request.user)
+    return render_to_response('schools/school_list.html', {'object_list': schools}, context_instance=RequestContext(request))
 
-class SchoolDetail(SchoolMixin, DetailView):
-    pass
+@login_required
+@require_GET
+def view_school(request, pk):
+    school_id = pk
+    school = get_object_or_404(School, members=request.user, id=school_id)
+    return render_to_response('schools/school_detail.html', {'object':school}, context_instance=RequestContext(request))
+
+@login_required
+@permission_required('schools.can_create')
+@require_http_methods(['GET','POST'])
+def create_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid:
+            school = form.save(commit=False)
+            school.save()
+            school.members = [request.user,]
+            return HttpResponseRedirect(reverse('school_list'))
+    else:
+        form = SchoolForm()
+    return render(request, 'schools/school_form.html', {'form':form}, context_instance=RequestContext(request))
+
 
 class SchoolCreate(SchoolMixin, CreateView):
     form_class = SchoolForm
