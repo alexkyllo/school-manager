@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'south',
     'rest_framework',
     'api',
+    'students',
 )
 
 MIDDLEWARE_CLASSES = (
