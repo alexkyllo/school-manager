@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+Welcome to School Manager Global Student Center!
+{% endblock %}
+{% block app_imports %}
+<script src="{% static "students/js/students.js" %}"></script>
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<p>Welcome to School Manager Student Center {{ user.username }}. Thanks for logging in.</p>
+<div class="btn-group">
+  <a href="/schools"><button type="button" class="btn btn-default">My Schools</button></a>
+  <a href="/schools/create"><button type="button" class="btn btn-default">Add a School</button></a>
+  <a href="/analytics"><button type="button" class="btn btn-default">Analytics</button></a>
+  <a href="/api"><button type="button" class="btn btn-default">API</button></a>
+  <a><button id="chart_refresh" type="button" class="btn btn-default">Refresh Chart</button></a>
+</div>
+<div class="container-fluid"> <!-- fluid Container -->
+  <div class="row"> <!-- row row  -->
+    <p>
+    {% if student_list %}
+        <ul>
+        {% for name in student_list %}
+            <li><a href="">{{ name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No students are available.</p>
+    {% endif %}
+    </p>
+  </div>
+</div>    
+<!-- Bottom Row Button group -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="active">Student</th>
+              <th class="success">Current School</th>
+              <th class="warning">Belt Ranking</th>
+              <th class="danger">Last Competition</th>
+              <th class="info">Notes</th>
+            </tr>
+          </thead>
+            {% if student_list %}
+                {% for student in student_list %}
+                <tr>
+                    <td class="active"><a href="">{{ student.name }}</a></td>
+                    <td class="active"><a href="">{{ student.current_affiliation }}</a></td>
+                    <td class="active"><a href="">{{ student.belt_rank }}</a></td>
+                    <td class="active"><a href="">{{ student.last_competition }}</a></td>
+                    <td class="active"><a href="">{{ student.notes }}</a></td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="active"><a href=""></a></td>
+                    <td class="active"><a href=""></a></td>
+                    <td class="active"><a href=""></a></td>
+                    <td class="active"><a href=""></a></td>
+                    <td class="active"><a href=""></a></td>
+                </tr>
+            {% endif %}          
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<p>Welcome, new user. Please <a href="/accounts/login/">log in</a> or <a href="/accounts/register">create</a>  and account</p>
+{% endif %}
+{% endblock %}
