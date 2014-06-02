@@ -70,16 +70,6 @@ def create_school(request):
         form = SchoolForm()
     return render(request, 'schools/school_form.html', {'form':form}, context_instance=RequestContext(request))
 
-
-class SchoolCreate(SchoolMixin, CreateView):
-    form_class = SchoolForm
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.save()
-        self.object.members = [self.request.user,]
-        return super(SchoolCreate, self).form_valid(form)
-
 class SchoolDelete(SchoolMixin, DeleteView):
     @method_decorator(permission_required('schools.can_delete', raise_exception=True))
     def dispatch(self, *args, **kwargs):
