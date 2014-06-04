@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'api',
     'students',
+    'school_calendar',
 )
 
 MIDDLEWARE_CLASSES = (

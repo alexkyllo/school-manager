@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 
-
 class School(models.Model):
     name = models.CharField(max_length=80)
     members = models.ManyToManyField(User)
