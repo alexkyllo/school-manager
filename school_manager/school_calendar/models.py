@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
+from django.http import Http404
 import pickle
 
 # Create your models here.
@@ -59,6 +60,17 @@ class Event(models.Model):
         '''
         rule = self.get_recurrence_rule()
         return rule.between(start, end, inc=True)
+
+    def get_month_event_occurrences(request, **kwargs):
+        year = kwargs['year']
+        month = kwargs['month']
+        if month not in range(1, 13):
+            raise Http404
+        events = Event.objects.filter(startdatetime__gt=datetime(year, month, 1, tzinfo=utc))
+        occurrences = []
+        occurrences += [event.get_occurrences(start=datetime(year, month, 1, tzinfo=utc), end=datetime(year, month+1, 1, tzinfo=utc)) for event in events]
+        combined = [item for sublist in occurrences for item in sublist]
+        return combined
 
 class Occurrence(models.Model):
     '''
