@@ -6,6 +6,11 @@ from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 
 class School(models.Model):
+    '''
+    A School instance is the overarching model for organizing all of the information related to the school being managed.
+    :name: The name of the school.
+    :members: A ManyToMany relation to User (django.contrib.auth.models.User) instances.
+    '''
     name = models.CharField(max_length=80)
     members = models.ManyToManyField(User)
     #slug = models.SlugField()
