@@ -62,13 +62,31 @@ class Event(models.Model):
         return rule.between(start, end, inc=True)
 
     def get_month_event_occurrences(request, **kwargs):
+        '''
+        Takes a year and month as arguments and returns a list of datetime objects representing the 
+        occurrences of the event during the specified month
+        '''
         year = kwargs['year']
         month = kwargs['month']
         if month not in range(1, 13):
             raise Http404
-        events = Event.objects.filter(startdatetime__gt=datetime(year, month, 1, tzinfo=utc))
-        occurrences = []
-        occurrences += [event.get_occurrences(start=datetime(year, month, 1, tzinfo=utc), end=datetime(year, month+1, 1, tzinfo=utc)) for event in events]
+        events = Event.objects.all()
+        occurrences = [event.get_occurrences(start=datetime(year, month, 1, tzinfo=utc), end=datetime(year, month+1, 1, tzinfo=utc)) for event in events]
+        combined = [item for sublist in occurrences for item in sublist]
+        return combined
+
+    def get_week_event_occurrences(request, **kwargs):
+        '''
+        Takes a year, and week as arguments and returns a list of datetime objects representing the occurrences 
+        of the event during the specified week
+        '''
+        year = kwargs['year']
+        week = kwargs['week']
+        start_of_week = datetime.strptime(str(year) + str(week) +"0+0000","%Y%U%w%z")
+        if week not in range(1,54):
+            raise Http404
+        events = Event.objects.all()
+        occurrences = [event.get_occurrences(start=start_of_week, end=start_of_week+timedelta(weeks=1)) for event in events]
         combined = [item for sublist in occurrences for item in sublist]
         return combined
 

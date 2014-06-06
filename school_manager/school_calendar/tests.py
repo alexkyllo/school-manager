@@ -21,6 +21,9 @@ class TestCalendarModels(TestCase):
     def test_event_get_month_occurrences(self):
         event = Event.objects.get(name='Test Event')
         month_occurrences = event.get_month_event_occurrences(year=2014, month=6)
-        print(month_occurrences)
         self.assertTrue(datetime(2014,6,9,12,0, tzinfo=utc) in month_occurrences)
 
+    def test_event_get_week_occurrences(self):
+        event = Event.objects.get(name='Test Event')
+        week_occurrences = event.get_week_event_occurrences(year=2014, week=23)
+        self.assertTrue(datetime(2014,6,9,12,0, tzinfo=utc) in week_occurrences)
