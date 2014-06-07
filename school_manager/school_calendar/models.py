@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
-from django.http import Http404
 import pickle
 
 # Create your models here.
@@ -61,7 +60,7 @@ class Event(models.Model):
         rule = self.get_recurrence_rule()
         return rule.between(start, end, inc=True)
 
-    def get_month_event_occurrences(request, **kwargs):
+    def get_month_event_occurrences(self, *args, **kwargs):
         '''
         Takes a year and month as arguments and returns a list of datetime objects representing the 
         occurrences of the event during the specified month
@@ -69,13 +68,11 @@ class Event(models.Model):
         year = kwargs['year']
         month = kwargs['month']
         if month not in range(1, 13):
-            raise Http404
-        events = Event.objects.all()
-        occurrences = [event.get_occurrences(start=datetime(year, month, 1, tzinfo=utc), end=datetime(year, month+1, 1, tzinfo=utc)) for event in events]
-        combined = [item for sublist in occurrences for item in sublist]
-        return combined
+            raise Exception("Month must be between 1 and 12.")
+        occurrences = self.get_occurrences(start=datetime(year, month, 1, tzinfo=utc), end=datetime(year, month+1, 1, tzinfo=utc))
+        return occurrences 
 
-    def get_week_event_occurrences(request, **kwargs):
+    def get_week_event_occurrences(self, *args, **kwargs):
         '''
         Takes a year, and week as arguments and returns a list of datetime objects representing the occurrences 
         of the event during the specified week
@@ -84,11 +81,9 @@ class Event(models.Model):
         week = kwargs['week']
         start_of_week = datetime.strptime(str(year) + str(week) +"0+0000","%Y%U%w%z")
         if week not in range(1,54):
-            raise Http404
-        events = Event.objects.all()
-        occurrences = [event.get_occurrences(start=start_of_week, end=start_of_week+timedelta(weeks=1)) for event in events]
-        combined = [item for sublist in occurrences for item in sublist]
-        return combined
+            raise Exception("Week must be between 1 and 53")
+        occurrences = self.get_occurrences(start=start_of_week, end=start_of_week+timedelta(weeks=1))
+        return occurrences
 
 class Occurrence(models.Model):
     '''
