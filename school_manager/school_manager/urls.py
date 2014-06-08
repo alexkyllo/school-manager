@@ -1,22 +1,12 @@
 from django.conf.urls import patterns, include, url
-from schools.views import (
-    list_schools, view_school, create_school,
-    SchoolUpdate, SchoolDelete, 
-    LocationList, LocationDetail, LocationCreate, LocationUpdate, LocationDelete,
-    CourseList, CourseCreate, CourseUpdate, CourseDelete, CourseDetail,
-    SessionCreate, SessionUpdate, SessionDelete, SessionDetail,
-    StudentCreate, StudentList,
-    InstructorCreate, InstructorList,
-    UserDetail, UserUpdate,
-    register, home
-)
+from schools.views import *
+from school_calendar.views import *
 from django.contrib import admin
 admin.autodiscover()
 from django.contrib.auth.views import login, logout_then_login
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from schools.models import School
 
 urlpatterns = patterns('',
     url(r'^$', login_required(home)),
@@ -63,6 +53,9 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<school_id>\d+)/instructors/create/$', InstructorCreate.as_view(), name='instructor_create'),
     url(r'^users/(?P<username>\w+)/$', UserDetail.as_view(), name='user_view'),
     url(r'^users/(?P<username>\w+)/update/$', UserUpdate.as_view(), name='user_update'),
+
+    #Calendar
+    url(r'^schools/(?P<school_id>\d+)/calendar/$', view_school_calendar, name='view_school_calendar'),
 )
 
 #URL routes for API
