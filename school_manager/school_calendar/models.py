@@ -42,6 +42,7 @@ class Event(models.Model):
     rule = models.ForeignKey(RecurrenceRule, blank=True, null=True)
     startdatetime = models.DateTimeField(default=datetime.now(utc))
     enddatetime = models.DateTimeField(default=datetime.now(utc)+timedelta(hours=1))
+    allday = models.BooleanField(default=False)
 
     def get_recurrence_rule(self):
         '''
@@ -50,6 +51,30 @@ class Event(models.Model):
         if self.rule:
             return rrule(eval(self.rule.frequency), dtstart=self.startdatetime, **self.rule.get_params())
         return None
+
+    def get_event_occurrences(self, start, end):
+        '''
+        Accepts start and end datetime objects and returns a list of Event objects that fall between the start and end date arguments,
+        representing occurrences of this particular event. 
+        '''
+        if self.rule:
+            rule = self.get_recurrence_rule()
+            recurrence_dates = rule.between(start, end, inc=True)
+            duration = self.enddatetime - self.startdatetime
+            events = [Event(
+                name=self.name, 
+                creator=self.creator, 
+                rule=self.rule, 
+                startdatetime=date,
+                enddatetime=date+duration,
+                allday=self.allday,
+            ) for date in recurrence_dates]
+            return events
+        else:
+            if (self.startdatetime >= start):
+                return [self]
+            else: 
+                return []
 
     def get_occurrences(self, start, end):
         '''

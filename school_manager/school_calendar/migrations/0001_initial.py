@@ -22,9 +22,10 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=36)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('rule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['school_calendar.RecurrenceRule'], blank=True, null=True)),
-            ('startdatetime', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 6, 7, 0, 0))),
+            ('rule', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, to=orm['school_calendar.RecurrenceRule'], null=True)),
+            ('startdatetime', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 6, 8, 0, 0))),
             ('enddatetime', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 6, 8, 0, 0))),
+            ('allday', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('school_calendar', ['Event'])
 
@@ -51,11 +52,11 @@ class Migration(SchemaMigration):
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'blank': 'True', 'symmetrical': 'False'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'blank': 'True', 'to': "orm['auth.Permission']"})
         },
         'auth.permission': {
-            'Meta': {'object_name': 'Permission', 'unique_together': "(('content_type', 'codename'),)", 'ordering': "('content_type__app_label', 'content_type__model', 'codename')"},
+            'Meta': {'unique_together': "(('content_type', 'codename'),)", 'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -66,7 +67,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'blank': 'True', 'max_length': '75'}),
             'first_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'blank': 'True', 'symmetrical': 'False', 'related_name': "'user_set'"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'user_set'", 'blank': 'True', 'to': "orm['auth.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -74,11 +75,11 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'blank': 'True', 'symmetrical': 'False', 'related_name': "'user_set'"}),
-            'username': ('django.db.models.fields.CharField', [], {'max_length': '30', 'unique': 'True'})
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'user_set'", 'blank': 'True', 'to': "orm['auth.Permission']"}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'object_name': 'ContentType', 'db_table': "'django_content_type'", 'unique_together': "(('app_label', 'model'),)", 'ordering': "('name',)"},
+            'Meta': {'unique_together': "(('app_label', 'model'),)", 'ordering': "('name',)", 'db_table': "'django_content_type'", 'object_name': 'ContentType'},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -86,12 +87,13 @@ class Migration(SchemaMigration):
         },
         'school_calendar.event': {
             'Meta': {'object_name': 'Event'},
+            'allday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'enddatetime': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 6, 8, 0, 0)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'rule': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['school_calendar.RecurrenceRule']", 'blank': 'True', 'null': 'True'}),
-            'startdatetime': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 6, 7, 0, 0)'})
+            'rule': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'to': "orm['school_calendar.RecurrenceRule']", 'null': 'True'}),
+            'startdatetime': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 6, 8, 0, 0)'})
         },
         'school_calendar.occurrence': {
             'Meta': {'object_name': 'Occurrence'},

@@ -27,3 +27,13 @@ class TestCalendarModels(TestCase):
         event = Event.objects.get(name='Test Event')
         week_occurrences = event.get_week_event_occurrences(year=2014, week=23)
         self.assertTrue(datetime(2014,6,9,12,0, tzinfo=utc) in week_occurrences)
+
+    def test_event_get_event_occurrences(self):
+        event = Event.objects.get(name='Test Event')
+        occurrences = event.get_event_occurrences(
+            datetime(2014,6,1,0,0,0, tzinfo=utc), 
+            datetime(2014,6,30,0,0,0, tzinfo=utc)
+        )
+        startdatetimes = [event.startdatetime for event in occurrences]
+        self.assertTrue(len(occurrences) == 4)
+        self.assertTrue(datetime(2014,6,9,12,0,0, tzinfo=utc) in startdatetimes)

@@ -13,6 +13,9 @@ from django.utils.timezone import utc
 
 @require_GET
 def view_school_calendar(request, **kwargs):
+    '''
+    Display the calendar template for a given school.
+    '''
     #now = datetime.now(tz=utc)
     school = School.objects.get(pk=kwargs['school_id'])
     return render_to_response('school_calendar/calendar_view.html', {'school' : school}, context_instance=RequestContext(request))
