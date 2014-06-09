@@ -40,8 +40,8 @@ class Event(models.Model):
     name = models.CharField(max_length=36)
     creator = models.ForeignKey(User)
     rule = models.ForeignKey(RecurrenceRule, blank=True, null=True)
-    startdatetime = models.DateTimeField(default=datetime.now(utc))
-    enddatetime = models.DateTimeField(default=datetime.now(utc)+timedelta(hours=1))
+    startdatetime = models.DateTimeField(blank=True, null=True)
+    enddatetime = models.DateTimeField(blank=True, null=True)
     allday = models.BooleanField(default=False)
 
     def get_recurrence_rule(self):
