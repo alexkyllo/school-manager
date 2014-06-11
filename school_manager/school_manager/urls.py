@@ -56,6 +56,7 @@ urlpatterns = patterns('',
 
     #Calendar
     url(r'^schools/(?P<school_id>\d+)/calendar/$', view_school_calendar, name='view_school_calendar'),
+    url(r'^schools/(?P<school_id>\d+)/calendar/events/$', view_all_events_between, name='view_school_calendar_events'),
 )
 
 #URL routes for API

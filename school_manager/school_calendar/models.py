@@ -62,6 +62,7 @@ class Event(models.Model):
             recurrence_dates = rule.between(start, end, inc=True)
             duration = self.enddatetime - self.startdatetime
             events = [Event(
+                id=self.id,
                 name=self.name, 
                 creator=self.creator, 
                 rule=self.rule, 

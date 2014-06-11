@@ -1,12 +1,20 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block content %}
 
-	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+	<!--<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.0.0/fullcalendar.min.js"></script>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.0.0/fullcalendar.css" />
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.0.0/fullcalendar.print.css" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.0.0/fullcalendar.print.css" />-->
+	<link rel="stylesheet" href="{% static "fullcalendar-2.0.0/fullcalendar.css" %}" />
+	<link rel="stylesheet" href="{% static "fullcalendar-2.0.0/fullcalendar.print.css" %}"/>
+	<!--<script src="{% static "fullcalendar-2.0.0/lib/jquery.min.js" %}"></script>-->
+	<script src="{% static "fullcalendar-2.0.0/lib/jquery-ui.custom.min.js" %}"></script>	
+	<script src="{% static "fullcalendar-2.0.0/lib/moment.min.js" %}"></script>
+	<script src="{% static "fullcalendar-2.0.0/fullcalendar.min.js" %}"></script>
+
 	<script>$(document).ready(function() {
 
     // page is now ready, initialize the calendar...
@@ -16,7 +24,9 @@
         		left: 'prev,next today',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
-        	}
+        	},
+        	events: 'events/',
+        	timezone: 'UTC'
     	})
 
 	});
