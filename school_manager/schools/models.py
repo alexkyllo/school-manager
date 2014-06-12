@@ -55,6 +55,8 @@ class Course(models.Model):
         return reverse('course_detail', args=[str(self.id)])
 
 class Session(models.Model):
+    #This will be replaced by Event model in the school_calendar app.
+    #A Session will just be a recurring Event related to a Course.
     school = models.ForeignKey(School)
     course = models.ForeignKey(Course)
     students = models.ManyToManyField(User)

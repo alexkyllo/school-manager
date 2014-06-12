@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from schools.models import School
+from schools.models import School, Course
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
@@ -40,6 +40,8 @@ class Event(models.Model):
     '''
     name = models.CharField(max_length=36)
     school = models.ForeignKey(School)
+    course = models.ForeignKey(Course, null=True)
+    attendees = models.ManyToManyField(User, related_name='attendees')
     creator = models.ForeignKey(User)
     rule = models.ForeignKey(RecurrenceRule, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
