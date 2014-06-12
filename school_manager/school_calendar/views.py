@@ -19,7 +19,6 @@ def view_school_calendar(request, **kwargs):
     '''
     Display the calendar template for a given school.
     '''
-    #now = datetime.now()
     school = School.objects.get(pk=kwargs['school_id'])
     return render_to_response('school_calendar/calendar_view.html', {'school' : school}, context_instance=RequestContext(request))
 
@@ -29,7 +28,7 @@ def view_all_events_between(request, **kwargs):
     This view is for the jquery-ui fullcalendar widget. Takes a GET request with a date range and returns all events inside the range
     in the JSON format that fullcalendar is expecting.
     '''
-    events = Event.objects.all()
+    events = Event.objects.filter(school_id=kwargs['school_id'])
     startdatetime = parser.parse(request.GET['start']+'T00:00:00.0+00:00')
     enddatetime = parser.parse(request.GET['end']+'T00:00:00.0+00:00')
     event_occurrences = [event.get_event_occurrences(startdatetime, enddatetime) for event in events]

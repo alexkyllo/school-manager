@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from schools.models import School
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
@@ -38,6 +39,7 @@ class Event(models.Model):
     This class defines a calendar event instance, which may be one-time or recurring via ForeignKey relation to a RecurrenceRule object
     '''
     name = models.CharField(max_length=36)
+    school = models.ForeignKey(School)
     creator = models.ForeignKey(User)
     rule = models.ForeignKey(RecurrenceRule, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
