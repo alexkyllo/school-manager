@@ -4,7 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext, loader
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
-from school_calendar.models import RecurrenceRule, Event, Occurrence
+from school_calendar.models import *
+from school_calendar.forms import *
 from schools.models import School
 from datetime import datetime
 from dateutil import parser
@@ -35,3 +36,50 @@ def view_all_events_between(request, **kwargs):
     event_occurrences_flat = [item for sublist in event_occurrences for item in sublist] #flatten the list of lists of events
     fullcalendar_events = [event_to_fullcalendar(event) for event in event_occurrences_flat]
     return HttpResponse(json.dumps(fullcalendar_events))
+
+@require_http_methods(['GET','POST'])
+def create_course_session(request, **kwargs):
+    if request.method == 'POST':
+        form = CourseSessionForm(request.POST)
+        if form.is_valid:
+            event = form.save(commit=False)
+            event.creator = request.user
+            course = get_object_or_404(Course, id=kwargs['course_id'])
+            school = get_object_or_404(School, id=course.school_id, members=request.user)
+            event.school = school
+            event.course = course
+            event.name = course.name
+            event.save()
+            return HttpResponseRedirect(reverse('view_school_calendar_events'))
+    else:
+        event_form = CourseSessionForm()
+        rule_form = RecurrenceRuleForm()
+    return render(request, 'school_calendar/event_form.html', {'event_form':event_form, 'rule_form':rule_form}, context_instance=RequestContext(request))
+
+@require_http_methods(['GET','POST'])
+def create_school_event(request, **kwargs):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid:
+            event = form.save(commit=False)
+            event.creator = request.user
+            school = get_object_or_404(School, id=kwargs['school_id'], members=request.user)
+            event.school = school
+            event.save()
+            return HttpResponseRedirect(reverse('view_school_calendar_events'))
+    else:
+        event_form = EventForm()
+        rule_form = RecurrenceRuleForm()
+    return render_to_response(request, 'school_calendar/event_form.html', {'event_form':event_form, 'rule_form':rule_form}, context_instance=RequestContext(request))
+
+@require_http_methods(['GET','POST'])
+def update_school_event(request, **kwargs):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid:
+            event = form.save(commit=False)
+            event.save()
+            return HttpResponseRedirect(reverse('view_school_calendar_events'))
+    else:
+        event_form = EventForm()
+    return render(request, 'school_calendar/event_form.html', {'event_form':form}, context_instance=RequestContext(request))

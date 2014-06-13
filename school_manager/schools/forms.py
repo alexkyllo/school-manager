@@ -3,7 +3,6 @@ from django.forms.extras.widgets import SelectDateWidget
 from schools.models import School, Location, Course, Session
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
 import datetime
 
 class SchoolForm(forms.ModelForm):
