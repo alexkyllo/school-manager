@@ -4,6 +4,7 @@ from schools.models import School, Course
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
+from django.forms.util import from_current_timezone
 import pickle
 
 # Create your models here.
@@ -25,6 +26,7 @@ class RecurrenceRule(models.Model):
     def get_params(self):
         if self.params:
             return pickle.loads(self.params)
+        return {}
 
     def save(self, *args, **kwargs):
         if self.params:
@@ -47,6 +49,13 @@ class Event(models.Model):
     startdatetime = models.DateTimeField(blank=True, null=True)
     enddatetime = models.DateTimeField(blank=True, null=True)
     allday = models.BooleanField(default=False)
+    recurring = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.allday == True:
+            self.startdatetime = from_current_timezone(datetime(self.startdatetime.year, self.startdatetime.month, self.startdatetime.day))
+            self.enddatetime = from_current_timezone(datetime(self.startdatetime.year, self.startdatetime.month, self.startdatetime.day + timedelta(days=1)))
+        super(Event, self).save(*args, **kwargs)
 
     def get_recurrence_rule(self):
         '''

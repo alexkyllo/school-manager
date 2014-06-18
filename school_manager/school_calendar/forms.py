@@ -1,20 +1,39 @@
-from school_calendar.models import *
 from django import forms
-from django.forms.extras.widgets import SelectDateWidget
+from school_calendar.models import *
+from school_calendar.widgets import *
+from school_calendar.fields import *
+from dateutil import rrule
 
-class DateTimeWidget(forms.MultiWidget):
-    def decompress(self, value):
-        if value:
-            return [value.date(), value.time().replace(microsecond=0)]
-        return [None, None]
+DAY_CHOICES = (
+    (MO,"Monday"),
+    (TU,"Tuesday"),
+    (WE,"Wednesday"),
+    (TH,"Thursday"),
+    (FR,"Friday" ),
+    (SA,"Saturday"),
+    (SU,"Sunday"),
+)
 
 class RecurrenceRuleForm(forms.ModelForm):
+    params = RecurrenceRuleParamsField(
+        label="Recurrence", 
+        required=False, 
+        widget=RecurrenceRuleParamsWidget(
+            [
+                forms.CheckboxSelectMultiple(choices=DAY_CHOICES),
+                SelectDateWidget(),
+            ]
+       )
+    )
+    #byweekday = forms.MultipleChoiceField(label="Weekdays",required=False, widget=forms.CheckboxSelectMultiple, choices=DAY_CHOICES)
+    #until = forms.DateField(label="Until", required=False, widget=SelectDateWidget())
     class Meta:
         model = RecurrenceRule
+        exclude = ('name',)
 
 class EventForm(forms.ModelForm):
-    startdatetime = forms.SplitDateTimeField(label="Start Date/Time", widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
-    enddatetime = forms.SplitDateTimeField(label="End Date/Time", widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    startdatetime = forms.SplitDateTimeField(label="Start Date/Time", required=True, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    enddatetime = forms.SplitDateTimeField(label="End Date/Time", required=False, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
     class Meta:
         model = Event
         exclude = ('school','attendees','creator','rule')
@@ -23,3 +42,20 @@ class CourseSessionForm(EventForm):
     class Meta:
         model = Event
         exclude = ('name','course','school','attendees','creator','rule')
+
+class CourseSessionRecurrenceForm(forms.Form):
+    startdatetime = forms.SplitDateTimeField(label="Start Date/Time", required=True, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    enddatetime = forms.SplitDateTimeField(label="End Date/Time", required=False, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    allday = forms.BooleanField(label="All Day", required=False)
+    recurring = forms.BooleanField(label="Recurring", required=False)
+    frequency = forms.ChoiceField(label="Frequency", required=False, choices=FREQUENCY_CHOICES)
+    params = RecurrenceRuleParamsField(
+        label="Days of Week / Until", 
+        required=False, 
+        widget=RecurrenceRuleParamsWidget(
+            [
+                forms.CheckboxSelectMultiple(choices=DAY_CHOICES),
+                SelectDateWidget(),
+            ]
+       )
+    )
