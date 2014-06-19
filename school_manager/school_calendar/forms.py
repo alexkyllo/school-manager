@@ -25,8 +25,6 @@ class RecurrenceRuleForm(forms.ModelForm):
             ]
        )
     )
-    #byweekday = forms.MultipleChoiceField(label="Weekdays",required=False, widget=forms.CheckboxSelectMultiple, choices=DAY_CHOICES)
-    #until = forms.DateField(label="Until", required=False, widget=SelectDateWidget())
     class Meta:
         model = RecurrenceRule
         exclude = ('name',)
@@ -49,13 +47,4 @@ class CourseSessionRecurrenceForm(forms.Form):
     allday = forms.BooleanField(label="All Day", required=False)
     recurring = forms.BooleanField(label="Recurring", required=False)
     frequency = forms.ChoiceField(label="Frequency", required=False, choices=FREQUENCY_CHOICES)
-    params = RecurrenceRuleParamsField(
-        label="Days of Week / Until", 
-        required=False, 
-        widget=RecurrenceRuleParamsWidget(
-            [
-                forms.CheckboxSelectMultiple(choices=DAY_CHOICES),
-                SelectDateWidget(),
-            ]
-       )
-    )
+    byweekday = forms.MultipleChoiceField(label="Recurrence Days", required=False, choices=DAY_CHOICES, widget=forms.CheckboxSelectMultiple())
