@@ -30,6 +30,7 @@ class RecurrenceRule(models.Model):
 
     def save(self, *args, **kwargs):
         if self.params:
+            self.params['byweekday'] = [eval(day) for day in self.params['byweekday']]
             self.params = pickle.dumps(self.params)
         super(RecurrenceRule, self).save(*args, **kwargs)
 
