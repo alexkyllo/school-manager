@@ -5,7 +5,6 @@ from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from django.forms.util import from_current_timezone
-import pickle
 
 # Create your models here.
 
@@ -16,26 +15,29 @@ FREQUENCY_CHOICES = (
     ('DAILY','daily'),
 )
 
-class RecurrenceRule(models.Model):
+class Rule(models.Model):
     '''
     This class stores an rrule object from python-dateutil as a django model for saving to the database. 
     '''
-    name = models.CharField(max_length=36)
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES)
-    params = models.BinaryField(blank=True)
+    byweekday = models.CharField(max_length=36, blank=True)
+    until = models.DateTimeField(blank=True, null=True)
     def get_params(self):
-        if self.params:
-            return pickle.loads(self.params)
-        return {}
+        return {
+                'byweekday':[eval(day) for day in eval(self.byweekday)],
+                'until':self.until,
+            }
+
+    def get_rrule(self):
+        return rrule(eval(self.frequency), **self.get_params())
 
     def save(self, *args, **kwargs):
-        if self.params:
-            self.params['byweekday'] = [eval(day) for day in self.params['byweekday']]
-            self.params = pickle.dumps(self.params)
-        super(RecurrenceRule, self).save(*args, **kwargs)
+#        if self.byweekday:
+#            self.byweekday = [str(day) for day in self.byweekday]
+        if self.until:
+            self.until = from_current_timezone(self.until)
+        super(Rule, self).save(*args, **kwargs)
 
-    def __unicode__(self):
-        return self.name
 
 class Event(models.Model):
     '''
@@ -46,7 +48,7 @@ class Event(models.Model):
     course = models.ForeignKey(Course, null=True)
     attendees = models.ManyToManyField(User, related_name='attendees')
     creator = models.ForeignKey(User)
-    rule = models.ForeignKey(RecurrenceRule, blank=True, null=True)
+    rule = models.ForeignKey(Rule, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
     enddatetime = models.DateTimeField(blank=True, null=True)
     allday = models.BooleanField(default=False)

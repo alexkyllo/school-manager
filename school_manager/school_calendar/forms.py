@@ -14,19 +14,26 @@ DAY_CHOICES = (
     (SU,"Sunday"),
 )
 
-class RecurrenceRuleForm(forms.ModelForm):
-    params = RecurrenceRuleParamsField(
-        label="Recurrence", 
-        required=False, 
-        widget=RecurrenceRuleParamsWidget(
-            [
-                forms.CheckboxSelectMultiple(choices=DAY_CHOICES),
-                SelectDateWidget(),
-            ]
-       )
-    )
+#class RecurrenceRuleForm(forms.ModelForm):
+#    params = RecurrenceRuleParamsField(
+#        label="Recurrence", 
+#        required=False, 
+#        widget=RecurrenceRuleParamsWidget(
+#            [
+#                forms.CheckboxSelectMultiple(choices=DAY_CHOICES),
+#                SelectDateWidget(),
+#            ]
+#       )
+#    )
+#    class Meta:
+#        model = RecurrenceRule
+#        exclude = ('name',)
+
+class RuleForm(forms.ModelForm):
+    byweekday = forms.MultipleChoiceField(label="Recur on weekdays", required=False, widget=forms.CheckboxSelectMultiple(), choices=DAY_CHOICES)
+    until = forms.DateField(label="Recur until", required=False, widget=SelectDateWidget())
     class Meta:
-        model = RecurrenceRule
+        model = Rule
         exclude = ('name',)
 
 class EventForm(forms.ModelForm):
@@ -40,11 +47,3 @@ class CourseSessionForm(EventForm):
     class Meta:
         model = Event
         exclude = ('name','course','school','attendees','creator','rule')
-
-class CourseSessionRecurrenceForm(forms.Form):
-    startdatetime = forms.SplitDateTimeField(label="Start Date/Time", required=True, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
-    enddatetime = forms.SplitDateTimeField(label="End Date/Time", required=False, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
-    allday = forms.BooleanField(label="All Day", required=False)
-    recurring = forms.BooleanField(label="Recurring", required=False)
-    frequency = forms.ChoiceField(label="Frequency", required=False, choices=FREQUENCY_CHOICES)
-    byweekday = forms.MultipleChoiceField(label="Recurrence Days", required=False, choices=DAY_CHOICES, widget=forms.CheckboxSelectMultiple())

@@ -42,13 +42,14 @@ def view_all_events_between(request, **kwargs):
 def create_course_session(request, **kwargs):
     if request.method == 'POST':
         event_form = CourseSessionForm(request.POST, instance=Event())
-        rule_form = RecurrenceRuleForm(request.POST, instance=RecurrenceRule())
+        rule_form = RuleForm(request.POST, instance=Rule())
         if event_form.is_valid():
             event = event_form.save(commit=False)
             event.creator = request.user
             course = get_object_or_404(Course, id=kwargs['course_id'])
             school = get_object_or_404(School, id=course.school_id, members=request.user)
             event.course = course
+            event.name = course.name
             event.school = school
             if event.recurring and rule_form.is_valid():
                 rule = rule_form.save()
@@ -57,5 +58,27 @@ def create_course_session(request, **kwargs):
             return HttpResponseRedirect(reverse('view_school_calendar', kwargs={'school_id':school.id}))
     else:
         event_form = CourseSessionForm(instance=Event())
-        rule_form = RecurrenceRuleForm(instance=RecurrenceRule())
+        rule_form = RuleForm(instance=Rule())
         return render_to_response('school_calendar/event_form.html', {'event_form':event_form,'rule_form':rule_form}, context_instance=RequestContext(request))
+
+#@require_http_methods(['GET','POST'])
+#def create_course_session(request, **kwargs):
+#    if request.method == 'POST':
+#        event_form = CourseSessionForm(request.POST, instance=Event())
+#        rule_form = RecurrenceRuleForm(request.POST, instance=RecurrenceRule())
+#        if event_form.is_valid():
+#            event = event_form.save(commit=False)
+#            event.creator = request.user
+#            course = get_object_or_404(Course, id=kwargs['course_id'])
+#            school = get_object_or_404(School, id=course.school_id, members=request.user)
+#            event.course = course
+#            event.school = school
+#            if event.recurring and rule_form.is_valid():
+#                rule = rule_form.save()
+#                event.rule = rule
+#            event.save()
+#            return HttpResponseRedirect(reverse('view_school_calendar', kwargs={'school_id':school.id}))
+#    else:
+#        event_form = CourseSessionForm(instance=Event())
+#        rule_form = RecurrenceRuleForm(instance=RecurrenceRule())
+#        return render_to_response('school_calendar/event_form.html', {'event_form':event_form,'rule_form':rule_form}, context_instance=RequestContext(request))
