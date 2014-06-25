@@ -24,7 +24,7 @@ class Rule(models.Model):
     until = models.DateTimeField(blank=True, null=True)
     def get_params(self):
         return {
-                'byweekday':[eval(day) for day in eval(self.byweekday)],
+                'byweekday':[eval(day) if self.byweekday is not None else '' for day in eval(self.byweekday)],
                 'until':self.until,
             }
 
@@ -126,6 +126,9 @@ class Event(models.Model):
             raise Exception("Week must be between 1 and 53")
         occurrences = self.get_occurrences(start=start_of_week, end=start_of_week+timedelta(weeks=1))
         return occurrences
+
+    def __str__(self):
+        return self.name
 
 class Occurrence(models.Model):
     '''

@@ -2,7 +2,7 @@
 {% block content %}
 	<form action="" method="post">
 		{% csrf_token %}
-		<h2>Create a Course Session</h2>
+		<h2>Create a Session</h2>
 		{{event_form.as_p}}
 		{{rule_form.as_p}}
 		<input type="submit" value="Save"/>

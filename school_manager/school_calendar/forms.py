@@ -39,11 +39,14 @@ class RuleForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     startdatetime = forms.SplitDateTimeField(label="Start Date/Time", required=True, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
     enddatetime = forms.SplitDateTimeField(label="End Date/Time", required=False, widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
+    recurring = forms.BooleanField(required=False, initial=False)
     class Meta:
         model = Event
-        exclude = ('school','attendees','creator','rule')
+        exclude = ('course','school','attendees','creator','rule')
 
 class CourseSessionForm(EventForm):
     class Meta:
         model = Event
         exclude = ('name','course','school','attendees','creator','rule')
+
+
