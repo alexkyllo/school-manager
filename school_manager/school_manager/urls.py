@@ -41,10 +41,10 @@ urlpatterns = patterns('',
 
     #Session Resources
     #url(r'^courses/(?P<course_id>\d+)/sessions/(?P<pk>\d+)/$', SessionList.as_view(), name='session_list'),
-    url(r'^sessions/(?P<pk>\d+)/$', SessionDetail.as_view(), name='session_detail'),
+    #url(r'^sessions/(?P<pk>\d+)/$', SessionDetail.as_view(), name='session_detail'),
     #url(r'^courses/(?P<course_id>\d+)/sessions/create/$', SessionCreate.as_view(), name='session_create'),
-    url(r'^sessions/(?P<pk>\d+)/update/$', SessionUpdate.as_view(), name='session_update'),
-    url(r'^sessions/(?P<pk>\d+)/delete/$', SessionDelete.as_view(), name='session_delete'),
+    #url(r'^sessions/(?P<pk>\d+)/update/$', SessionUpdate.as_view(), name='session_update'),
+    #url(r'^sessions/(?P<pk>\d+)/delete/$', SessionDelete.as_view(), name='session_delete'),
 
     #User Resources
     url(r'^schools/(?P<school_id>\d+)/students/$', StudentList.as_view(), name='student_list'),
@@ -59,7 +59,8 @@ urlpatterns = patterns('',
     url(r'^schools/(?P<school_id>\d+)/calendar/events/$', view_all_events_between, name='view_school_calendar_events'),
     url(r'^schools/(?P<school_id>\d+)/events/create/$', create_event, name='create_school_event'),
     url(r'^courses/(?P<course_id>\d+)/sessions/create/$', create_event, name='create_course_session'),
-    #url(r'^courses/(?P<course_id>\d+)/sessions/update/$', update_course_session, name='update_course_session'),
+    url(r'^schools/(?P<school_id>\d+)/events/(?P<pk>\d+)/update/$', update_event, name='update_school_event'),
+    url(r'^courses/(?P<course_id>\d+)/sessions/(?P<pk>\d+)/update/$', update_event, name='update_course_session'),
 )
 
 #URL routes for API

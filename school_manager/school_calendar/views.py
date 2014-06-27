@@ -73,3 +73,37 @@ def create_event(request, **kwargs):
             event_form = EventForm(instance=Event())
         rule_form = RuleForm(instance=Rule())
     return render_to_response('school_calendar/event_form.html', {'event_form':event_form,'rule_form':rule_form}, context_instance=RequestContext(request))
+
+@require_http_methods(['GET','POST'])
+def update_event(request, **kwargs):
+    if request.method == 'POST':
+        event = get_object_or_404(Event, id=kwargs['pk'])
+        if 'course_id' in kwargs:
+            event_form = CourseSessionForm(request.POST, instance=event)
+        else:
+            event_form = EventForm(request.POST, instance=event)
+        if event.rule:
+            rule_form = RuleForm(instance=event.rule)
+        else:
+            rule_form = RuleForm(instance=Rule())
+        if event_form.is_valid():
+            event = event_form.save(commit=False)
+            if event.recurring:
+                    if rule_form.is_valid():
+                        rule = rule_form.save()
+                        event.rule = rule
+                    else:
+                        return render_to_response('school_calendar/event_form.html', {'event_form':event_form,'rule_form':rule_form}, context_instance=RequestContext(request))
+            event.save()
+            return HttpResponseRedirect(reverse('view_school_calendar', kwargs={'school_id':event.school_id}))
+    else:
+        event = get_object_or_404(Event, id=kwargs['pk'])
+        if 'course_id' in kwargs:
+            event_form = CourseSessionForm(instance=event)
+        else:
+            event_form = EventForm(instance=event)
+        if event.rule:
+            rule_form = RuleForm(instance=event.rule)
+        else:
+            rule_form = RuleForm(instance=Rule())
+    return render_to_response('school_calendar/event_form.html', {'event_form':event_form,'rule_form':rule_form}, context_instance=RequestContext(request))
