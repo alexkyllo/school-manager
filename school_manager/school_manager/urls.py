@@ -10,6 +10,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     url(r'^$', login_required(home)),
+    url(r'^app/$', angular_home),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout_then_login),

@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'students',
     'school_calendar',
     'corsheaders',
+    'angular',
 )
 
 MIDDLEWARE_CLASSES = (

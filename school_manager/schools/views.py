@@ -294,6 +294,19 @@ class UserUpdate(UpdateView):
 
 #Function Based Views for homepage and register page
 
+def angular_home(request):
+    template = loader.get_template('angular/index.html')
+    context = RequestContext(request, {
+    })
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+
+    return HttpResponse(template.render(context))
+
 def home(request):
     """This function renders the schools index.html"""
     template = loader.get_template('schools/index.html')
