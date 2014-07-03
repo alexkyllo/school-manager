@@ -1,12 +1,27 @@
 # CBVs for API Viewsets
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from api.permissions import IsManager, IsMember, IsManagerOrInstructor
 from api.serializers import (
     UserSerializer, GroupSerializer, SchoolSerializer, LocationSerializer, CourseSerializer,
 )
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import login, logout
 from schools.models import School, Location, Course, Session
+
+class AuthView(APIView):
+    authentication_classes = (BasicAuthentication,)
+
+    def post(self, request, *args, **kwargs):
+        login(request, request.user)
+        return Response(UserSerializer(request.user).data)
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response()
 
 class UserViewSet(viewsets.ModelViewSet):
     """

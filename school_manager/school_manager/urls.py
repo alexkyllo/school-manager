@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from schools.views import *
 from school_calendar.views import *
+from api.views import *
 from django.contrib import admin
 admin.autodiscover()
 from django.contrib.auth.views import login, logout_then_login
@@ -86,6 +87,7 @@ router.register(r'courses', CourseViewSet)
 urlpatterns += (
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/auth/', AuthView.as_view(), name='authenticate'),
 )
 
 if settings.DEBUG:
