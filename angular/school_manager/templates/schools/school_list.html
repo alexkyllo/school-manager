@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>My Schools</h2>
+    <ul>
+            {% if object_list %}
+                {% for school in object_list %}
+                    <li><a href="{{ school.get_absolute_url }}" >{{ school.name }}</a></li>
+                {% endfor %}
+
+            {% else %}
+                    <h3> No students entered yet </h3>
+            {% endif %}  
+
+
+    </ul>
+    <p><a href="/schools/create"><button type="button" class="btn btn-default">Add a School</button></a></p>
+{% endblock %}

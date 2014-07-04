@@ -1,0 +1,138 @@
+[
+{
+    "model": "auth.group",
+    "fields": {
+        "permissions": [],
+        "name": "Students"
+    },
+    "pk": 1
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "permissions": [
+            [
+                "change_course",
+                "schools",
+                "course"
+            ],
+            [
+                "add_session",
+                "schools",
+                "session"
+            ],
+            [
+                "change_session",
+                "schools",
+                "session"
+            ],
+            [
+                "delete_session",
+                "schools",
+                "session"
+            ],
+            [
+                "add_session",
+                "sessions",
+                "session"
+            ],
+            [
+                "change_session",
+                "sessions",
+                "session"
+            ],
+            [
+                "delete_session",
+                "sessions",
+                "session"
+            ]
+        ],
+        "name": "Instructors"
+    },
+    "pk": 2
+},
+{
+    "model": "auth.group",
+    "fields": {
+        "permissions": [
+            [
+                "add_course",
+                "schools",
+                "course"
+            ],
+            [
+                "change_course",
+                "schools",
+                "course"
+            ],
+            [
+                "delete_course",
+                "schools",
+                "course"
+            ],
+            [
+                "add_location",
+                "schools",
+                "location"
+            ],
+            [
+                "change_location",
+                "schools",
+                "location"
+            ],
+            [
+                "delete_location",
+                "schools",
+                "location"
+            ],
+            [
+                "add_school",
+                "schools",
+                "school"
+            ],
+            [
+                "change_school",
+                "schools",
+                "school"
+            ],
+            [
+                "delete_school",
+                "schools",
+                "school"
+            ],
+            [
+                "add_session",
+                "schools",
+                "session"
+            ],
+            [
+                "change_session",
+                "schools",
+                "session"
+            ],
+            [
+                "delete_session",
+                "schools",
+                "session"
+            ],
+            [
+                "add_session",
+                "sessions",
+                "session"
+            ],
+            [
+                "change_session",
+                "sessions",
+                "session"
+            ],
+            [
+                "delete_session",
+                "sessions",
+                "session"
+            ]
+        ],
+        "name": "Managers"
+    },
+    "pk": 3
+}
+]

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{%block title %}
+Welcome to School Manager!
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+<div class="btn-group">
+  <a href="/schools"><button type="button" class="btn btn-default">My Schools</button></a>
+  <a href="/schools/create"><button type="button" class="btn btn-default">Add a School</button></a>
+  <a href="/analytics"><button type="button" class="btn btn-default">Analytics</button></a>
+  <a href="/api"><button type="button" class="btn btn-default">API</button></a>
+</div>
+{% else %}
+  <p>Welcome, new user. Please <a href="/accounts/login/">log in</a> or <a href="/accounts/register">create an account</a></p>
+{% endif %}
+{% endblock %}

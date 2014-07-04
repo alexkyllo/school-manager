@@ -1,0 +1,84 @@
+[
+{
+    "fields": {
+        "password": "pbkdf2_sha256$12000$h9HQvYvF9Yzc$nL2Yb3C8b3DuOhbrhH8/wgoq+Oqe4AGKcLrxgFztkQ8=",
+        "last_name": "Kyllo",
+        "first_name": "Alex",
+        "date_joined": "2014-05-10T16:10:57Z",
+        "is_active": true,
+        "user_permissions": [],
+        "last_login": "2014-05-20T13:55:04.355Z",
+        "username": "kyllo",
+        "is_superuser": true,
+        "email": "alex.kyllo@gmail.com",
+        "is_staff": true,
+        "groups": [
+            2,
+            3
+        ]
+    },
+    "model": "auth.user",
+    "pk": 1
+},
+{
+    "fields": {
+        "password": "pbkdf2_sha256$12000$T3hfxawQT7rz$aFHQmt4PZOfTfeasArpJuh1pfLuYk/leGnxZugJTtU4=",
+        "last_name": "Dog",
+        "first_name": "Ruby",
+        "date_joined": "2014-05-11T06:06:36Z",
+        "is_active": true,
+        "user_permissions": [],
+        "last_login": "2014-05-17T00:34:25.845Z",
+        "username": "ruby",
+        "is_superuser": false,
+        "email": "",
+        "is_staff": false,
+        "groups": [
+            1
+        ]
+    },
+    "model": "auth.user",
+    "pk": 2
+},
+{
+    "fields": {
+        "password": "pbkdf2_sha256$12000$PzBrKfKMDf2D$DKLXPuViYlqjwjw3ZSShojLNV8tu+W8Nw4OV+wlbaGY=",
+        "last_name": "",
+        "first_name": "",
+        "date_joined": "2014-05-11T06:49:59Z",
+        "is_active": true,
+        "user_permissions": [],
+        "last_login": "2014-05-16T13:56:53Z",
+        "username": "madongo",
+        "is_superuser": false,
+        "email": "",
+        "is_staff": false,
+        "groups": [
+            2,
+            3
+        ]
+    },
+    "model": "auth.user",
+    "pk": 3
+},
+{
+    "fields": {
+        "password": "pbkdf2_sha256$12000$4VN4kqmOqdtK$c/g/7y6ZLhrD+QeRwx7Nyq9WsG9UPw+HnSwtYZZRYvg=",
+        "last_name": "",
+        "first_name": "",
+        "date_joined": "2014-05-13T00:01:42Z",
+        "is_active": true,
+        "user_permissions": [],
+        "last_login": "2014-05-13T00:01:51Z",
+        "username": "testuser2",
+        "is_superuser": false,
+        "email": "",
+        "is_staff": false,
+        "groups": [
+            1
+        ]
+    },
+    "model": "auth.user",
+    "pk": 4
+}
+]

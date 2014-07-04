@@ -1,0 +1,32 @@
+[
+{
+    "fields": {
+        "name": "Yoga 101",
+        "school": 1,
+        "students": [
+            2
+        ],
+        "instructors": [
+            1
+        ],
+        "location": 1
+    },
+    "model": "schools.course",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Beginning BJJ",
+        "school": 2,
+        "students": [
+            4
+        ],
+        "instructors": [
+            3
+        ],
+        "location": 2
+    },
+    "model": "schools.course",
+    "pk": 2
+}
+]

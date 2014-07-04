@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>School Detail for {{ object.name }}</h2>
+    <ul>
+        <li>Name: {{ object.name }}</li>
+    </ul>
+    <a href="update/"><button type="button" class="btn btn-default">Update {{ object.name }}</button></a>
+    <a href="delete/"><button type="button" class="btn btn-default">Delete {{ object.name }}</button></a>
+    <a href="locations/"><button type="button" class="btn btn-default">Locations for {{ object.name }}</button></a>
+    <a href="students/"><button type="button" class="btn btn-default">Students for {{ object.name }}</button></a>
+    <a href="instructors/"><button type="button" class="btn btn-default">Instructors for {{ object.name }}</button></a>
+    <a href="calendar/"><button type="button" class="btn btn-default">Calendar for {{ object.name }}</button></a>
+{% endblock %}

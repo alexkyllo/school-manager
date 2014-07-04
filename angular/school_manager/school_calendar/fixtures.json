@@ -1,0 +1,22 @@
+[
+{
+    "fields": {
+        "frequency": "WEEKLY",
+        "byweekday" : "['MO']"
+    },
+    "model": "school_calendar.rule",
+    "pk": 1
+},
+{
+    "fields": {
+        "creator": 1,
+        "rule": 1,
+        "startdatetime": "2014-06-02T12:00:00Z",
+        "enddatetime": "2014-06-02T13:00:00Z",
+        "name": "Test Event",
+        "school": 1
+    },
+    "model": "school_calendar.event",
+    "pk": 1
+}
+]
