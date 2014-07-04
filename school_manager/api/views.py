@@ -13,7 +13,7 @@ from django.contrib.auth import login, logout
 from schools.models import School, Location, Course, Session
 
 class AuthView(APIView):
-    authentication_classes = (BasicAuthentication,)
+    #authentication_classes = (BasicAuthentication,)
 
     def post(self, request, *args, **kwargs):
         login(request, request.user)

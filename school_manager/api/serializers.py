@@ -29,7 +29,7 @@ class SchoolSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = School
-        fields = ('url', 'name', 'locations', 'members',)
+        fields = ('id', 'url', 'name', 'locations', 'members',)
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
     courses = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='course-detail')

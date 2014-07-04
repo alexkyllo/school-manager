@@ -25,9 +25,9 @@
   <script src="{% static "fullcalendar-2.0.0/fullcalendar.min.js" %}"></script>
   <script src="{% static "app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js" %}"></script>
 </head>
-<body>
+<body ng-controller="authController">
   
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="authController" ng-init="authState.user='{{user.username}}'">
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-init="authState.user='{{user.username}}'">
   {% verbatim %}
     <div class="container">
       <div class="navbar-header">
@@ -46,6 +46,7 @@
           </ul>
         
           <div ng-show="authState.user" class="navbar-form navbar-right">
+            <select name="Select School:" ng-model="Shared.selectedSchool" ng-options="school.name for school in schools"></select>
             <input type="submit" class="btn btn-default" ng-click="logout()" value="logout {{authState.user}}"/>
           </div>
           <div ng-hide="authState.user">
@@ -58,7 +59,6 @@
                   </div>
                   <div class="btn-group">
                       <input type="submit" class="btn btn-default" value="login">
-                      <input type="submit" class="btn btn-default" value="register" ng-click="register($event)">
                   </div>
               </form>
           </div>
@@ -71,11 +71,10 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" ng-app="myApp">
-      <div ng-view></div>
+    <div class="jumbotron" ng-show="authState.user">
     </div>
-    <div class="container">
-        
+    <div class="container" ng-show="authState.user">
+      <div ng-view></div>
     </div>
     <footer>
       <p>&copy; The School Manager Company 2014</p>
@@ -88,6 +87,7 @@
   <script src="{% static "app/bower_components/angular-route/angular-route.js" %}"></script>
   <script src="{% static "app/bower_components/angular-resource/angular-resource.js" %}"></script>
   <script src="{% static "app/bower_components/angular-cookies/angular-cookies.js" %}"></script>
+  <script src="{% static "app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js" %}"></script>
   <script src="{% static "app/js/app.js" %}"></script>
   <script src="{% static "app/js/services.js" %}"></script>
   <script src="{% static "app/js/controllers.js" %}"></script>
