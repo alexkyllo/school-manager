@@ -3,25 +3,35 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-  .controller('userSchoolsCtrl', ['$scope', function($scope){
-    $scope.schools = [
-      {'name': 'A Cool School', 'id': 1}
-    ]
-  }])
+  .controller('userSchoolsCtrl', function($scope, api, Shared){
+    $scope.Shared = Shared;
+    $scope.schools = api.schools.get(function(data){
+            return data.schools;
+        });
+  })
   .controller('CalendarCtrl', ['$scope', function($scope) {
 
   }])
   .controller('StudentListCtrl', function($scope, api, Shared) {
-  	$scope.students = api.students.get(function(data){
-        return data.students;
-    });
+      $scope.Shared = Shared;
+      $scope.getStudents = function(){
+        api.schoolStudents.get({schoolId : Shared.selectedSchool.id}).
+        $promise.then(
+          function(data){
+            $scope.students = data;
+          }
+        )
+      }
+      $scope.$watch('Shared.selectedSchool', function() {
+        $scope.getStudents();
+      });
   })
-  .controller('authController', function($scope, api, authState) {
+  .controller('authController', function($scope, api, authState, Shared) {
         
         //$('#id_auth_form input').checkAndTriggerAutoFillEvent();
 
         $scope.authState = authState;
-        $scope.selectedSchool = undefined;
+        $scope.Shared = Shared;
 
         $scope.getCredentials = function(){
             return {username: $scope.username, password: $scope.password};
@@ -50,7 +60,4 @@ angular.module('myApp.controllers', [])
                         alert(data.data.username);
                     });
         };
-        $scope.schools = api.schools.get(function(data){
-            return data.schools;
-        });
     });

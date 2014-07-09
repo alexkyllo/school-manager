@@ -1,5 +1,5 @@
 # CBVs for API Viewsets
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.response import Response
@@ -23,6 +23,13 @@ class AuthView(APIView):
         logout(request)
         return Response()
 
+class SchoolStudentListView(generics.ListAPIView):
+    authentication_classes = (BasicAuthentication,)
+    serializer_class = UserSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return User.objects.filter(groups__name='Students', school__id=self.kwargs.get('school_id'), school__members=self.request.user)
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -32,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsManager,)
 
     def get_queryset(self):
-        return User.objects.filter(school__members=self.request.user)
+        return User.objects.filter(groups__name='Students', school__members=self.request.user)
     
 class GroupViewSet(viewsets.ModelViewSet):
     """

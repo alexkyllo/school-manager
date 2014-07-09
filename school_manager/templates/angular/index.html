@@ -46,7 +46,7 @@
           </ul>
         
           <div ng-show="authState.user" class="navbar-form navbar-right">
-            <select name="Select School:" ng-model="Shared.selectedSchool" ng-options="school.name for school in schools"></select>
+            <select name="Select School:" ng-controller="userSchoolsCtrl" ng-model="Shared.selectedSchool" ng-options="school.name for school in schools"></select>
             <input type="submit" class="btn btn-default" ng-click="logout()" value="logout {{authState.user}}"/>
           </div>
           <div ng-hide="authState.user">
@@ -72,6 +72,7 @@
   <![endif]-->
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron" ng-show="authState.user">
+      <!--<pre>{{Shared.selectedSchool.name}}</pre>-->
     </div>
     <div class="container" ng-show="authState.user">
       <div ng-view></div>

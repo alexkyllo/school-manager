@@ -1,0 +1,13 @@
+<script type="text/ng-template" id="student_details.html">
+	<div class="modal-header">
+		<h3 class='modal-title'>Student Details:</h3>
+	</div>
+	<ul>
+		<li>Name (Last, First): {{student.last_name}}, {{student.first_name}}</li>
+		<li>E-Mail: {{student.email}}</li>
+	</ul>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="ok()">OK</button>
+	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

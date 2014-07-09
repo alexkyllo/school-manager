@@ -197,8 +197,8 @@ class StudentList(ListView):
     model = User
     template_name = 'schools/student_list.html'
 
-    def get_queryset(self):
-        return User.objects.filter(groups__name='Students', school__members=self.request.user)
+    def get_queryset(self, *args, **kwargs):
+        return User.objects.filter(groups__name='Students', school__id=self.kwargs.get('school_id'), school__members=self.request.user)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

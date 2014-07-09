@@ -1,10 +1,11 @@
-<p>Student List</p>
-<p>
-  <div ng-controller="StudentListCtrl">
-  	<ul>
-    <li ng-repeat="student in students">
-      <p>{{student.first_name}} {{student.last_name}}</p>
-    </li>
-  </ul>
-  </div>
-</p>
+<div ng-controller="StudentListCtrl">
+	<p>Student List for {{Shared.selectedSchool.name}}</p>
+	<p>
+	  	<ul>
+	    <li ng-repeat="student in students">
+	      <a ng-click="open()">{{student.first_name}} {{student.last_name}}</a>
+	    </li>
+	  </ul>
+	  </div>
+	</p>
+</div>

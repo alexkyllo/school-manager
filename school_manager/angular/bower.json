@@ -12,7 +12,11 @@
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
     "angular-resource": "~1.2.x",
-    "angular-cookies":"",
-    "angular-bootstrap":"0.11.0"
+    "angular-cookies": "",
+    "angular-bootstrap": "0.11.0",
+    "angular-ui-calendar": "latest"
+  },
+  "resolutions": {
+    "jquery": "~2.x"
   }
 }
