@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     url(r'^courses/(?P<course_id>\d+)/sessions/create/$', create_event, name='create_course_session'),
     url(r'^schools/(?P<school_id>\d+)/events/(?P<pk>\d+)/update/$', update_event, name='update_school_event'),
     url(r'^courses/(?P<course_id>\d+)/sessions/(?P<pk>\d+)/update/$', update_event, name='update_course_session'),
+    url(r'^events/$', view_all_events_between, name='view_calendar_events')
 )
 
 #URL routes for API
@@ -88,7 +89,8 @@ urlpatterns += (
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/auth/', AuthView.as_view(), name='authenticate'),
-    url(r'^api/schools/(?P<school_id>\d+)/students/', SchoolStudentListView.as_view(), name='school_student_list_view')
+    url(r'^api/schools/(?P<school_id>\d+)/students/', SchoolStudentListView.as_view(), name='school_student_list_view'),
+    url(r'^api/schools/(?P<school_id>\d+)/courses/', SchoolCourseListView.as_view(), name='school_course_list_view'),
 )
 
 if settings.DEBUG:

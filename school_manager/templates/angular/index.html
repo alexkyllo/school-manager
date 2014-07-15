@@ -25,7 +25,7 @@
   <script src="{% static "fullcalendar-2.0.0/fullcalendar.min.js" %}"></script>
   <script src="{% static "app/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js" %}"></script>
 </head>
-<body ng-controller="authController">
+<body ng-cloak ng-controller="authController">
   
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-init="authState.user='{{user.username}}'">
   {% verbatim %}
@@ -40,14 +40,15 @@
         <a class="navbar-brand" href="#">School Manager V 0.0.1</a>
       </div>
       <div class="navbar-collapse collapse">
-          <ul class="menu navbar-form navbar-left">
+          <ul ng-show="authState.user" class="menu navbar-form navbar-left">
             <li class="navbar-form navbar-left"><a href="#/calendar">Calendar</a></li>
+            <li class="navbar-form navbar-left"><a href="#/courses">Courses</a></li>
             <li class="navbar-form navbar-left"><a href="#/students">Students</a></li>
           </ul>
         
           <div ng-show="authState.user" class="navbar-form navbar-right">
             <select name="Select School:" ng-controller="userSchoolsCtrl" ng-model="Shared.selectedSchool" ng-options="school.name for school in schools"></select>
-            <input type="submit" class="btn btn-default" ng-click="logout()" value="logout {{authState.user}}"/>
+            <input type="submit" class="btn btn-default" ng-click="logout()" value="Logout"/>
           </div>
           <div ng-hide="authState.user">
               <form id="id_auth_form" class="navbar-form navbar-right" ng-submit="login()">
@@ -73,9 +74,12 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron" ng-show="authState.user">
       <!--<pre>{{Shared.selectedSchool.name}}</pre>-->
+      <div ng-hide="Shared.selectedSchool">
+        <h2>Please select a school.</h2>
+      </div>
     </div>
     <div class="container" ng-show="authState.user">
-      <div ng-view></div>
+      <div ng-show="Shared.selectedSchool" ng-view></div>
     </div>
     <footer>
       <p>&copy; The School Manager Company 2014</p>
@@ -89,6 +93,7 @@
   <script src="{% static "app/bower_components/angular-resource/angular-resource.js" %}"></script>
   <script src="{% static "app/bower_components/angular-cookies/angular-cookies.js" %}"></script>
   <script src="{% static "app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js" %}"></script>
+  <script src="{% static "app/bower_components/angular-ui-calendar/src/calendar.js" %}"></script>
   <script src="{% static "app/js/app.js" %}"></script>
   <script src="{% static "app/js/services.js" %}"></script>
   <script src="{% static "app/js/controllers.js" %}"></script>

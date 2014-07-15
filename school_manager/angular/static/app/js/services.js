@@ -34,7 +34,10 @@ angular.module('myApp.services', []).
             students: $resource('/api/students/:id/', {id:'@id'},{
                 get: {method: 'GET', isArray: true}
             }),
-            schoolStudents: $resource('/api/schools/:schoolId/students/', {schoolId:'@schoolId'},{
+            schoolStudents: $resource('/api/schools/:schoolId/students\\/', {schoolId:'@schoolId'},{
+            	get: {method: 'GET', isArray: true}
+            }),
+            schoolCourses: $resource('/api/schools/:schoolId/courses\\/', {schoolId:'@schoolId'},{
             	get: {method: 'GET', isArray: true}
             })
         };

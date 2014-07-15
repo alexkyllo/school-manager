@@ -30,6 +30,13 @@ class SchoolStudentListView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         return User.objects.filter(groups__name='Students', school__id=self.kwargs.get('school_id'), school__members=self.request.user)
 
+class SchoolCourseListView(generics.ListAPIView):
+    authentication_classes = (BasicAuthentication,)
+    serializer_class = CourseSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Course.objects.filter(school__id=self.kwargs.get('school_id'), school__members=self.request.user)
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

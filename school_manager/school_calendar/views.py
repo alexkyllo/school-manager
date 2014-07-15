@@ -30,7 +30,13 @@ def view_all_events_between(request, **kwargs):
     This view is for the jquery-ui fullcalendar widget. Takes a GET request with a date range and returns all events inside the range
     in the JSON format that fullcalendar is expecting.
     '''
-    events = Event.objects.filter(school_id=kwargs['school_id'])
+    if 'school_id' in kwargs:
+        school_id = kwargs['school_id']
+    elif 'schoolId' in request.GET:
+        school_id = request.GET['schoolId']
+    else:
+        raise Http404
+    events = Event.objects.filter(school_id=school_id)
     startdatetime = parser.parse(request.GET['start']+'T00:00:00.0+00:00')
     enddatetime = parser.parse(request.GET['end']+'T00:00:00.0+00:00')
     event_occurrences = [event.get_event_occurrences(startdatetime, enddatetime) for event in events]

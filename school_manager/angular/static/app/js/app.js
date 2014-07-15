@@ -10,11 +10,13 @@ angular.module('myApp', [
   'myApp.controllers',
   'ngResource',
   'ngCookies',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.calendar'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/calendar', {templateUrl: '../static/app/partials/calendar.html', controller: 'CalendarCtrl'});
   $routeProvider.when('/students', {templateUrl: '../static/app/partials/students.html', controller: 'StudentListCtrl'});
+  $routeProvider.when('/courses', {templateUrl: '../static/app/partials/courses.html', controller: 'CourseListCtrl'});
   $routeProvider.otherwise({redirectTo: '/'});
 }]).
 config(['$httpProvider', function($httpProvider){
