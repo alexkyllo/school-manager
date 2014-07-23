@@ -1,0 +1,209 @@
+<form name="form" class="css-form" novalidate>
+		<h2>Create an Event</h2>
+		<p><label for="id_name">Name:</label> <input id="id_name" maxlength="36" name="name" type="text" /></p>
+<p><label for="id_startdatetime_0">Start Date/Time:</label> <select id="id_startdatetime_0_month" name="startdatetime_0_month">
+<option value="0">---</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+<select id="id_startdatetime_0_day" name="startdatetime_0_day">
+<option value="0">---</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+<select id="id_startdatetime_0_year" name="startdatetime_0_year">
+<option value="0">---</option>
+<option value="2014">2014</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+<option value="2022">2022</option>
+<option value="2023">2023</option>
+</select><input id="id_startdatetime_1" name="startdatetime_1" type="text" /></p>
+<p><label for="id_enddatetime_0">End Date/Time:</label> <select id="id_enddatetime_0_month" name="enddatetime_0_month">
+<option value="0">---</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+<select id="id_enddatetime_0_day" name="enddatetime_0_day">
+<option value="0">---</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+<select id="id_enddatetime_0_year" name="enddatetime_0_year">
+<option value="0">---</option>
+<option value="2014">2014</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+<option value="2022">2022</option>
+<option value="2023">2023</option>
+</select><input id="id_enddatetime_1" name="enddatetime_1" type="text" /></p>
+<p><label for="id_allday">Allday:</label> <input id="id_allday" name="allday" type="checkbox" /></p>
+<p><label for="id_recurring">Recurring:</label> <input id="id_recurring" name="recurring" type="checkbox" /></p>
+		<p><label for="id_frequency">Frequency:</label> <select id="id_frequency" name="frequency">
+<option value="" selected="selected">---------</option>
+<option value="YEARLY">yearly</option>
+<option value="MONTHLY">monthly</option>
+<option value="WEEKLY">weekly</option>
+<option value="DAILY">daily</option>
+</select></p>
+<p><label for="id_byweekday_0">Recur on weekdays:</label> <ul id="id_byweekday">
+<li><label for="id_byweekday_0"><input id="id_byweekday_0" name="byweekday" type="checkbox" value="MO" /> Monday</label></li>
+<li><label for="id_byweekday_1"><input id="id_byweekday_1" name="byweekday" type="checkbox" value="TU" /> Tuesday</label></li>
+<li><label for="id_byweekday_2"><input id="id_byweekday_2" name="byweekday" type="checkbox" value="WE" /> Wednesday</label></li>
+<li><label for="id_byweekday_3"><input id="id_byweekday_3" name="byweekday" type="checkbox" value="TH" /> Thursday</label></li>
+<li><label for="id_byweekday_4"><input id="id_byweekday_4" name="byweekday" type="checkbox" value="FR" /> Friday</label></li>
+<li><label for="id_byweekday_5"><input id="id_byweekday_5" name="byweekday" type="checkbox" value="SA" /> Saturday</label></li>
+<li><label for="id_byweekday_6"><input id="id_byweekday_6" name="byweekday" type="checkbox" value="SU" /> Sunday</label></li>
+</ul></p>
+<p><label for="id_until_month">Recur until:</label> <select id="id_until_month" name="until_month">
+<option value="0">---</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+<select id="id_until_day" name="until_day">
+<option value="0">---</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+<select id="id_until_year" name="until_year">
+<option value="0">---</option>
+<option value="2014">2014</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+<option value="2022">2022</option>
+<option value="2023">2023</option>
+</select></p>
+<button class="btn btn-default">Save</button>
+</form>

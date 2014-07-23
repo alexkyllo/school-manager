@@ -1,9 +1,12 @@
 <div>
 	<h2>Student List for {{Shared.selectedSchool.name}}</h2>
 	<p>
-	  	<ul>
+		<button class="btn btn-default" ng-click="openModal(undefined,'lg', 'new')">Add a Student</button>
+	</p>
+	<p>
+	  <ul>
 	    <li ng-repeat="student in students">
-	      <a ng-click="open()">{{student.first_name}} {{student.last_name}}</a>
+	      <a ng-click="openModal(student, 'lg', 'edit')">{{student.first_name}} {{student.last_name}}</a>
 	    </li>
 	  </ul>
 	  </div>

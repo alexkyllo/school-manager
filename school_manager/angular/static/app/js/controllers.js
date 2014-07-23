@@ -9,7 +9,7 @@ angular.module('myApp.controllers', [])
             return data.schools;
         });
   })
-  .controller('CalendarCtrl', ['$scope', 'api', 'Shared', function($scope, api, Shared) {
+  .controller('CalendarCtrl', ['$scope', 'api', '$modal', 'Shared', function($scope, api, $modal, Shared) {
     $scope.Shared = Shared;
     $scope.initializeCalendar = function(){
         $scope.uiConfig = {
@@ -54,8 +54,12 @@ angular.module('myApp.controllers', [])
       }
     })
 
+    $scope.openModal = function(){
+      $modal.open({templateUrl:'../static/app/partials/new_event.html'});
+    }
+
   }])
-  .controller('StudentListCtrl', function($scope, api, Shared) {
+  .controller('StudentListCtrl', ['$scope', '$modal', 'api', 'Shared', function($scope, $modal, api, Shared) {
       $scope.Shared = Shared;
       $scope.getStudents = function(){
         api.schoolStudents.get({schoolId : Shared.selectedSchool.id}).
@@ -68,8 +72,71 @@ angular.module('myApp.controllers', [])
       $scope.$watch('Shared.selectedSchool', function() {
         $scope.getStudents();
       });
-  })
-  .controller('CourseListCtrl', function($scope, api, Shared) {
+      $scope.openModal = function(student, size, method){
+        $scope.method = method;
+        $scope.student = student;
+        var modalInstance = $modal.open({
+          templateUrl: '../static/app/partials/student_details.html',
+          controller: function($scope, $modalInstance, student, api, method){
+              $scope.method = method;
+              console.log("Method: " + $scope.method);
+              $scope.student = student;
+              if ($scope.method == 'new'){
+                $scope.editing = true;
+              } else {
+                $scope.editing = false;
+              }
+              $scope.setEditing = function(){
+                $scope.editing = true;
+              }
+              $scope.setStudent = function(student){
+                $scope.student = student;
+              }
+              $scope.ok = function () {
+                $modalInstance.close($scope.student);
+              };
+
+              $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+              };
+
+            },
+          size: size,
+          resolve: {
+            student: function(){
+              return $scope.student;
+            },
+            method: function(){
+              return $scope.method;
+            }
+          }
+        })
+        modalInstance.result.then(function(student){
+          console.log("modal closed");
+          $scope.getStudents();
+        });
+      }
+  }])
+  .controller('StudentEditCtrl', ['$scope','api', function($scope, api){
+    if ($scope.student){
+      $scope.user = angular.copy($scope.student);
+    } else {
+      $scope.user = new api.students();
+    }
+    $scope.saveUser = function() {
+      if ($scope.student){
+        api.users.update($scope.user, function(result){
+          $scope.setStudent(angular.copy($scope.user));
+        });
+      } else {
+        $scope.user.save().$promise.then(
+          function(result){
+          $scope.setStudent(angular.copy($scope.user));
+        })
+      }
+    }
+  }])
+  .controller('CourseListCtrl', ['$scope', '$modal', 'api', 'Shared', function($scope, $modal, api, Shared) {
       $scope.Shared = Shared;
       $scope.getCourses = function(){
         api.schoolCourses.get({schoolId : Shared.selectedSchool.id}).
@@ -82,7 +149,7 @@ angular.module('myApp.controllers', [])
       $scope.$watch('Shared.selectedSchool', function() {
         $scope.getCourses();
       });
-  })
+  }])
   .controller('authController', function($scope, api, authState, Shared) {
         
         //$('#id_auth_form input').checkAndTriggerAutoFillEvent();

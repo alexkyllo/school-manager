@@ -16,7 +16,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def restore_object(self, attrs, instance=None):
         user = super(UserSerializer, self).restore_object(attrs, instance)
-        user.set_password(attrs['password'])
+        if 'password' in attrs:
+            user.set_password(attrs['password'])
         return user
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

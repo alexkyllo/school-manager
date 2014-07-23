@@ -1,28 +1,4 @@
-	<!--<script src="/app/fullcalendar-2.0.0/jquery-1.8.1-min.js"></script>
-	<script src="/app/fullcalendar-2.0.0/lib/jquery-ui.custom.min.js"></script>  
-    <script src="/app/fullcalendar-2.0.0/lib/moment.min.js"></script>
-    <script src="/app/fullcalendar-2.0.0/fullcalendar.min.js"></script>-->
 	<link rel="stylesheet" href="../static/app/fullcalendar-2.0.0/fullcalendar.css" />
 	<link rel="stylesheet" href="../static/app/fullcalendar-2.0.0/fullcalendar.print.css"/>
-	<!--<script>$(document).ready(function() {
-
-    // page is now ready, initialize the calendar...
-
-    	$('#calendar').fullCalendar({
-        	header: {
-        		left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
-        	},
-        	events: 'http://localhost:3000/schools/14/calendar/events/',
-        	timezone: 'UTC'
-    	})
-
-	});
-	</script>-->
-	<div>
-		<button>Add an Event</button>
-	</div>
 	<div ng-include="Shared.selectedSchool ? '../static/app/partials/calendar-partial.html' : null"></div>
 	</div>
-	<!--<div id='calendar' class='fc fc-ltr' ng-controller="CalendarCtrl"></div>-->

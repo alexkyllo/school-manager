@@ -1,13 +1,16 @@
-<script type="text/ng-template" id="student_details.html">
+
 	<div class="modal-header">
 		<h3 class='modal-title'>Student Details:</h3>
 	</div>
-	<ul>
+	<ul ng-hide="method == 'new'">
 		<li>Name (Last, First): {{student.last_name}}, {{student.first_name}}</li>
 		<li>E-Mail: {{student.email}}</li>
+		<li>Username: {{student.username}}</li>
 	</ul>
+	<div ng-include="editing ? '../static/app/partials/student_form.html' : null">
+	</div>
 	<div class="modal-footer">
+		<button ng-hide="editing" class="btn btn-primary" ng-click="setEditing()">Edit</button>
 	    <button class="btn btn-primary" ng-click="ok()">OK</button>
 	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 	</div>
-</script>

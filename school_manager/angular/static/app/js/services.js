@@ -27,7 +27,9 @@ angular.module('myApp.services', []).
                 login:  {method: 'POST', transformRequest: add_auth_header},
                 logout: {method: 'DELETE'}
             }),
-            users: $resource('/api/users/:id/', {id:'@id'}, {}),
+            users: $resource('/api/users/:id\\/', {id:'@id'}, {
+            	update: {method: 'PATCH'}
+            }),
             schools: $resource('/api/schools/:id/', {id:'@id'}, {
                 get: {method: 'GET', isArray: true}
             }),
