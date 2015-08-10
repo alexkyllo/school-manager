@@ -32,7 +32,6 @@ class SessionForm(forms.ModelForm):
     enddatetime = forms.SplitDateTimeField(label="End Date/Time", widget=DateTimeWidget([SelectDateWidget, forms.TimeInput,]))
     class Meta:
         model = Session
-        
         exclude = ('school','course','students')
 
 class ManagerCreationForm(UserCreationForm):

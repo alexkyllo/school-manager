@@ -72,15 +72,15 @@ from django.conf.urls import patterns, url, include
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'schools', SchoolViewSet)
-router.register(r'users', UserViewSet)
+router.register(r'schools', SchoolViewSet, base_name='schools')
+router.register(r'users', UserViewSet, base_name='users')
 router.register(r'instructors', InstructorViewSet, base_name='instructors')
 router.register(r'students', StudentViewSet, base_name='students')
 router.register(r'groups', GroupViewSet)
-router.register(r'locations', LocationViewSet)
-router.register(r'courses', CourseViewSet)
+router.register(r'locations', LocationViewSet, base_name='locations')
+router.register(r'courses', CourseViewSet, base_name='courses')
 
-# Wire up our API using automatic URL routing.
+# Wire up our API using automatic URL routing
 # Additionally, we include login URLs for the browseable API.
 urlpatterns += (
     url(r'^api/', include(router.urls)),

@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os.path import join
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -38,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'analytics',
-    'south',
     'rest_framework',
     'api',
     'students',
@@ -104,7 +104,7 @@ STATIC_ROOT = (
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'staticfiles'), )
 
 TEMPLATE_DIRS = (
-    BASE_DIR + '/templates/'
+    join(BASE_DIR,  'templates'),
 )
 
 #AUTH_PROFILE_MODULE = 'schools.Person' #actually this is deprecated as of Django 1.5
