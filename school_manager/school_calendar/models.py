@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from schools.models import School, Course
+from schools.models import School, Course, Location
 from dateutil.rrule import *
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
@@ -17,7 +17,7 @@ FREQUENCY_CHOICES = (
 
 class Rule(models.Model):
     '''
-    This class stores an rrule object from python-dateutil as a django model for saving to the database. 
+    This class stores an rrule object from python-dateutil as a django model for saving to the database.
     '''
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES)
     byweekday = models.CharField(max_length=36, blank=True)
@@ -45,6 +45,7 @@ class Event(models.Model):
     '''
     name = models.CharField(max_length=36)
     school = models.ForeignKey(School)
+    location = models.ForeignKey(Location, null=True)
     course = models.ForeignKey(Course, null=True)
     attendees = models.ManyToManyField(User, related_name='attendees')
     creator = models.ForeignKey(User)
